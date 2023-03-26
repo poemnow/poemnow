@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.PoemMapper" >
+    <select id="poemList" resultType="com.cgm.poemnow.domain.Poem">
+        select * from poem <!--(필요한 쿼리문 작성) - 출력-->
+    </select>
+<!--    <insert id="insert">-->
+<!--        INSERT INTO dto (-->
+<!--        hit,-->
+<!--        title,-->
+<!--        writedate,-->
+<!--        writer)-->
+<!--        VALUES (-->
+<!--        #{hit},-->
+<!--        #{title},-->
+<!--        #{writeDate},-->
+<!--        #{writer}-->
+<!--        )  &lt;!&ndash;(필요한 쿼리문 작성) -입력&ndash;&gt;-->
+<!--    </insert>-->
+</mapper>
