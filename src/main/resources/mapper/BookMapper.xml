@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.BookMapper" >
+
+    <select id="selectAllBooks" resultType="com.cgm.poemnow.domain.Book">
+        select id, title, author from book <!--(필요한 쿼리문 작성) - 출력-->
+    </select>
+
+    <insert id="insertBook" parameterType="com.cgm.poemnow.domain.Book">
+        INSERT INTO book
+            (
+             title,
+             author
+            )
+        VALUES
+            (
+             #{title},
+             #{author}
+            )
+    </insert>
+
+</mapper>
