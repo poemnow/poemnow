@@ -20,4 +20,10 @@ public class PoemServiceImpl implements PoemService {
 	public List<Poem> listPoem() {
 		return poemMapper.poemList();
 	}
+
+	@Override
+	public Poem addPoem(Poem poem) {
+		return poemMapper.insertPoem(poem);
+	}
+
 }

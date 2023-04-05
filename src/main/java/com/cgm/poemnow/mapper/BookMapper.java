@@ -2,16 +2,17 @@ package com.cgm.poemnow.mapper;
 
 import java.util.List;
 
-import com.cgm.poemnow.domain.Poem;
+import com.cgm.poemnow.domain.Book;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
-public interface PoemMapper {
+public interface BookMapper {
 
-	List<Poem> poemList();
-	Poem insertPoem(Poem poem);
+	int insertBook(Book book);
+
+	List<Book> selectAllBooks();
 
 }
