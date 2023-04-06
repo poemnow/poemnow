@@ -3,7 +3,7 @@
 <mapper namespace="com.cgm.poemnow.mapper.BookMapper" >
 
     <select id="selectAllBooks" resultType="com.cgm.poemnow.domain.Book">
-        select id, title, author from book <!--(필요한 쿼리문 작성) - 출력-->
+        SELECT id, title, author FROM book
     </select>
 
     <insert id="insertBook" parameterType="com.cgm.poemnow.domain.Book">
@@ -18,5 +18,23 @@
              #{author}
             )
     </insert>
+
+    <select id="selectBookById" parameterType="int" resultType="com.cgm.poemnow.domain.Book">
+        SELECT id, title, author
+        FROM book
+        WHERE id = #{id}
+    </select>
+
+    <insert id="updateBook" parameterType="com.cgm.poemnow.domain.Book">
+        UPDATE book
+        SET title = #{title}
+        WHERE id = #{id}
+    </insert>
+
+    <delete id="deleteBook" parameterType="int">
+        DELETE
+        FROM book
+        WHERE id = #{param1}
+    </delete>
 
 </mapper>

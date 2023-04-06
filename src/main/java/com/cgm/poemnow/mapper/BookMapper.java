@@ -15,4 +15,10 @@ public interface BookMapper {
 
 	List<Book> selectAllBooks();
 
+	Book selectBookById(int id);
+
+	int updateBook(Book book);
+
+	int deleteBook(int id);
+
 }
