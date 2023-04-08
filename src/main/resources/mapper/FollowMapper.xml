@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.FollowMapper" >
+    <select id="listFollow" resultType="hashmap" parameterType="Integer">
+        SELECT U.user_id , U.user_nickname FROM follow F
+         INNER JOIN USER U ON F.follow_id = U.ID
+        WHERE F.USER_ID = #{userId} <!--#{userId} -->
+    </select>
+    <select id="listFollower" resultType="hashmap" parameterType="Integer">
+        SELECT U.user_id , U.user_nickname FROM follow F
+         INNER JOIN USER U ON F.USER_ID = U.ID
+        WHERE F.follow_id = #{userId};
+    </select>
+    <insert id="insertFollow" parameterType="com.cgm.poemnow.domain.Follow">
+        INSERT INTO FOLLOW(user_id, follow_id)
+        VALUES (#{userId} , #{followId})
+    </insert>
+    <delete id="removeFollow" parameterType="int">
+        DELETE FROM FOLLOW
+        WHERE user_id = 1 AND follow_id = #{followId};
+    </delete>
+</mapper>
