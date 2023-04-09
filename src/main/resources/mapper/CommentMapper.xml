@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.CommentMapper" >
+
+    <insert id="insertComment" parameterType="com.cgm.poemnow.domain.Comment">
+        INSERT INTO comment
+            (
+            content,
+            user_id,
+            poem_id,
+            created_at,
+            deleted
+            )
+        VALUES
+            (
+            #{content},
+            #{userId},
+            #{poemId},
+            CURRENT_TIME(),
+            FALSE
+            )
+    </insert>
+
+    <select id="selectAllComments" resultType="com.cgm.poemnow.domain.Comment">
+        SELECT c.id, c.content, c.created_at, c.updated_at, u.user_nickname
+        FROM comment c
+        INNER JOIN user u ON c.user_id = u.id
+    </select>
+
+    <update id="updateComment" parameterType="com.cgm.poemnow.domain.Comment">
+        UPDATE comment
+        SET content = #{content}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteComment" parameterType="int">
+        UPDATE comment
+        SET deleted = TRUE
+        WHERE id = #{id}
+    </update>
+
+</mapper>
