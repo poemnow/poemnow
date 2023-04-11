@@ -23,8 +23,6 @@ public class FollowController {
 		int response = followService.addFollow(followRequest);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
-
-
 	//팔로우 취소
 	@DeleteMapping(path = "/followRemove")
 	public ResponseEntity<?> followRemove(@RequestParam int followId){
@@ -32,14 +30,13 @@ public class FollowController {
 		int response = followService.removeFollow(userId, followId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 	//내가 팔로우 한 사람 보기
 	@GetMapping(path = "/followList")
 	public ResponseEntity<List<HashMap<String, String>>> followList() {
 		int userId = 1; // httpsesion에서 받아오는 아이디
 		List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
 
-		response = followService.listFollow(userId);
+		response = followService.findFollow(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	//나를 팔로워 한 사람 보기
@@ -47,8 +44,7 @@ public class FollowController {
 	public ResponseEntity<List<HashMap<String, String>>> followerList() {
 		int userId = 3; // httpsesion에서 받아오는 아이디
 		List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
-		response = followService.listFollower(userId);
+		response = followService.findFollower(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
 }
