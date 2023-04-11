@@ -13,9 +13,9 @@ public interface FollowMapper {
 
 	int insertFollow(Follow followRequest);
 
-	List<HashMap<String, String>> listFollow(int userId);
+	List<HashMap<String, String>> selectFollow(int userId);
 
-	int removeFollow( int userId , int followId);
+	int deleteFollow( int userId , int followId);
 
-	List<HashMap<String, String>> listFollower(int userId);
+	List<HashMap<String, String>> selectFollower(int userId);
 }

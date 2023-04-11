@@ -23,17 +23,17 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public List<HashMap<String, String>> listFollow(int userId) {
-		return followMapper.listFollow(userId);
+	public List<HashMap<String, String>> findFollow(int userId) {
+		return followMapper.selectFollow(userId);
 	}
 
 	@Override
 	public int removeFollow( int userId , int followId) {
-		return followMapper.removeFollow(userId, followId);
+		return followMapper.deleteFollow(userId, followId);
 	}
 
 	@Override
-	public List<HashMap<String, String>> listFollower(int userId) {
-		return followMapper.listFollower(userId);
+	public List<HashMap<String, String>> findFollower(int userId) {
+		return followMapper.selectFollower(userId);
 	}
 }

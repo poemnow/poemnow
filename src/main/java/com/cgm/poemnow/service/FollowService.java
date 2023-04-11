@@ -9,9 +9,9 @@ public interface FollowService {
 
 	int addFollow(Follow followRequest);
 
-	List<HashMap<String, String>> listFollow(int userId);
+	List<HashMap<String, String>> findFollow(int userId);
 
 	int removeFollow( int userId , int followId);
 
-	List<HashMap<String, String>> listFollower(int userId);
+	List<HashMap<String, String>> findFollower(int userId);
 }
