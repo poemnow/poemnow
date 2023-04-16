@@ -14,4 +14,8 @@ public interface FollowService {
 	int removeFollow( int userId , int followId);
 
 	List<HashMap<String, String>> findFollower(int userId);
+
+    int findFollowCnt(int userId);
+
+	int findFollowerCnt(int userId);
 }

@@ -18,4 +18,8 @@ public interface FollowMapper {
 	int deleteFollow( int userId , int followId);
 
 	List<HashMap<String, String>> selectFollower(int userId);
+
+    int selectFollowCnt(int userId);
+
+	int selectFollowerCnt(int userId);
 }

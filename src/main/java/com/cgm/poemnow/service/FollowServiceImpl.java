@@ -36,4 +36,14 @@ public class FollowServiceImpl implements FollowService {
 	public List<HashMap<String, String>> findFollower(int userId) {
 		return followMapper.selectFollower(userId);
 	}
+
+	@Override
+	public int findFollowCnt(int userId) {
+		return followMapper.selectFollowCnt(userId);
+	}
+
+	@Override
+	public int findFollowerCnt(int userId) {
+		return followMapper.selectFollowerCnt(userId);
+	}
 }
