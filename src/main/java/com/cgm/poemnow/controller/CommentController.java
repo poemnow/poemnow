@@ -29,16 +29,15 @@ public class CommentController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PatchMapping("/commentModify")
-	public ResponseEntity<?> commentModify(@RequestParam int id, @RequestParam String content) {
-		Comment comment = Comment.builder().id(id).content(content).build();
-		int response = commentService.modifyComment(comment);
+	@PutMapping("/commentModify")
+	public ResponseEntity<?> commentModify(@RequestBody Comment commentRequest) {
+		int response = commentService.modifyComment(commentRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/commentRemove/{id}")
-	public ResponseEntity<?> commentRemove(@PathVariable("id") int id) {
-		int response = commentService.removeComment(id);
+	@PutMapping("/commentRemove")
+	public ResponseEntity<?> commentRemove(@RequestBody Comment commentRequest) {
+		int response = commentService.removeComment(commentRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

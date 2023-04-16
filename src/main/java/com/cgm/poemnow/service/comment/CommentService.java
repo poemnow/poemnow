@@ -12,6 +12,6 @@ public interface CommentService {
 
 	int modifyComment(Comment comment);
 
-	int removeComment(int id);
+	int removeComment(Comment comment);
 
 }

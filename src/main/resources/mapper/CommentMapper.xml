@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.CommentMapper" >
 
+    <resultMap id="commentMap" type="com.cgm.poemnow.domain.Comment">
+        <result column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="poem_id" property="poemId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
     <insert id="insertComment" parameterType="com.cgm.poemnow.domain.Comment">
         INSERT INTO comment
             (
@@ -21,21 +31,21 @@
             )
     </insert>
 
-    <select id="selectAllComments" resultType="com.cgm.poemnow.domain.Comment">
-        SELECT c.id, c.content, c.created_at, c.updated_at, u.user_nickname
+    <select id="selectAllComments" resultMap="commentMap">
+        SELECT c.id, c.content, c.created_at, c.updated_at, u.user_nickname, c.deleted
         FROM comment c
         INNER JOIN user u ON c.user_id = u.id
     </select>
 
     <update id="updateComment" parameterType="com.cgm.poemnow.domain.Comment">
         UPDATE comment
-        SET content = #{content}, updated_at = #{updatedAt}
+        SET content = #{content}, updated_at = CURRENT_TIME()
         WHERE id = #{id}
     </update>
 
-    <update id="deleteComment" parameterType="int">
+    <update id="deleteComment" parameterType="com.cgm.poemnow.domain.Comment">
         UPDATE comment
-        SET deleted = TRUE
+        SET deleted = 1
         WHERE id = #{id}
     </update>
 
