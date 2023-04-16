@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.FollowMapper" >
+
     <select id="selectFollow" resultType="hashmap" parameterType="Integer">
         SELECT u.user_id , u.user_nickname FROM follow f
          INNER JOIN user u ON f.follow_id = u.id
@@ -32,4 +33,5 @@
         SELECT COUNT(*) FROM follow
         where follow_id = #{userId};
     </select>
+
 </mapper>

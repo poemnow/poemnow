@@ -18,4 +18,5 @@ public interface FollowService {
     int findFollowCnt(int userId);
 
 	int findFollowerCnt(int userId);
+
 }

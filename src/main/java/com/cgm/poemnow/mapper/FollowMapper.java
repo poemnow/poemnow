@@ -22,4 +22,5 @@ public interface FollowMapper {
     int selectFollowCnt(int userId);
 
 	int selectFollowerCnt(int userId);
+
 }

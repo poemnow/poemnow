@@ -16,7 +16,6 @@ public class FollowServiceImpl implements FollowService {
 	@Autowired
 	private FollowMapper followMapper;
 
-
 	@Override
 	public int addFollow(Follow followRequest) {
 		return followMapper.insertFollow(followRequest);
@@ -46,4 +45,5 @@ public class FollowServiceImpl implements FollowService {
 	public int findFollowerCnt(int userId) {
 		return followMapper.selectFollowerCnt(userId);
 	}
+
 }
