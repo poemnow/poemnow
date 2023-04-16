@@ -1,44 +1,43 @@
 package com.cgm.poemnow.controller;
 
-
 import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
 	@Autowired
 	private UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<Boolean> userAdd(@RequestBody User userRequest) {
-		boolean isSuccess = userService.addUser(userRequest);
-		if (!isSuccess) {
-			return new ResponseEntity<Boolean>( false, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<Object> userAdd(@RequestBody User userRequest) {
+		try {
+			userService.addUser(userRequest);
+			return new ResponseEntity<>("사용자가 성공적으로 생성됐습니다", HttpStatus.CREATED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<User> userLogin(@RequestBody User userRequest) {
 		boolean isSuccess = userService.loginUser(userRequest);
 		if (!isSuccess) {
-			return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		User loginedUser = userService.findUserById(userRequest);
+		User loginedUser = userService.findUserById(userRequest.getUserId());
 		if (loginedUser == null) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<User>(loginedUser, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(loginedUser, HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping("/logout")
@@ -47,46 +46,51 @@ public class UserController {
 		if (!isSuccess) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		User logoutedUser = userService.findUserById(userRequest);
+		User logoutedUser = userService.findUserById(userRequest.getUserId());
 		if (logoutedUser == null) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<User>(logoutedUser, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(logoutedUser, HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping("/withdraw")
-	public ResponseEntity<User> userRemove(@RequestBody User userRequest) {
-		boolean isSuccess = userService.removeUser(userRequest);
-		if (!isSuccess) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	@PostMapping("/withdraw/{id}")
+	public ResponseEntity<?> userRemove(@PathVariable("id") String id) {
+		try {
+			userService.removeUser(id);
+			return new ResponseEntity<>("사용자 탈퇴 성공", HttpStatus.ACCEPTED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		User withdrawedUser= userService.findUserById(userRequest);
-		if (withdrawedUser == null) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<User>(withdrawedUser, HttpStatus.ACCEPTED);
 	}
 
-	@GetMapping("/profile")
-	public ResponseEntity<User> userDetail(@RequestBody User userRequest) {
-		User user = userService.findUserById(userRequest);
-		if (user == null) {
-			return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+	@GetMapping("/profile/{id}")
+	public ResponseEntity<?> userDetail(@PathVariable("id") String id) {
+		try {
+			User user = userService.findUserById(id);
+			return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<User>(user, HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping("/profile")
-	public ResponseEntity<User> userModify(@RequestBody User userRequest) {
-		boolean isSuccess = userService.modifyUser(userRequest);
-		if (!isSuccess) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	@PostMapping("/profile/{id}")
+	public ResponseEntity<?> userModify(@PathVariable("id") String id, @RequestBody User userRequest) {
+		try {
+			userService.modifyUser(userRequest);
+			return new ResponseEntity<>("사용자 정보 업데이트 성공", HttpStatus.ACCEPTED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		User modifiedUser = userService.findUserById(userRequest);
-		return new ResponseEntity<User>(modifiedUser, HttpStatus.ACCEPTED);
 	}
 
 	// 소셜 로그인 추후 구현
 
 	// 본인 인증 추후 구현
+
 }
