@@ -21,6 +21,7 @@ import com.google.gson.JsonParser;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ class FollowControllerTest {
     @Test
     //콘솔창에 무슨 테스트 인지 띄어줌
     @DisplayName("팔로우 추가 및 리스트 조회 테스트")
+    @Transactional
     void followAddAndFollowList() throws Exception {
         // given 데이터를 보내줄 애를 만들자
         //Follow 객체를 넣으니 만들자
@@ -138,7 +140,6 @@ class FollowControllerTest {
     @Test
     @DisplayName("팔로우 수 구하기 테스트")
     void testFollowCnt() {
-        int userId = 1;
         int followCnt = 10;
 
         when(followService.findFollowCnt(anyInt())).thenReturn(followCnt);
@@ -151,7 +152,6 @@ class FollowControllerTest {
     @Test
     @DisplayName("팔로워 수 구하기")
     void testFollowerCnt() {
-        int userId = 2;
         int followerCnt = 5;
 
         when(followService.findFollowerCnt(anyInt())).thenReturn(followerCnt);

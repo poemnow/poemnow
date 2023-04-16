@@ -9,6 +9,7 @@ import lombok.Data;
 //builder()메서드 쓰려면 @builder 써야 함
 @Builder
 public class Follow {
+
 	private int id;
 	private int userId;
 	private int followId;
