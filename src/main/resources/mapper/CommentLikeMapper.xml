@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.CommentLikeMapper" >
+
+    <select id="selectCommentLike" resultType="HashMap" parameterType="Integer">
+        SELECT u.user_id userId, l.comment_id commentId FROM comment_like l
+        INNER JOIN user u ON l.user_id = u.id
+        WHERE l.user_id = #{userId}
+    </select>
+
+    <insert id="insertCommentLike" parameterType="com.cgm.poemnow.domain.PoemLike">
+        INSERT INTO comment_like(user_id, comment_id)
+        VALUES (#{userId} , #{commentId})
+    </insert>
+
+    <delete id="deleteCommentLike" parameterType="Integer">
+        DELETE FROM comment_like
+        WHERE user_id = #{userId} AND comment_id = #{commentId};
+    </delete>
+
+</mapper>

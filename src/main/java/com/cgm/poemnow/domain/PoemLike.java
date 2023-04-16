@@ -3,11 +3,13 @@ package com.cgm.poemnow.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Like {
+@Builder
+public class PoemLike {
 
     private int userId;
     private int poemId;
