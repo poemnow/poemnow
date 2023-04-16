@@ -18,7 +18,7 @@ class PoemnowApplicationTests {
 
 	@Test
 	void getPoemList() {
-		String result = poemService.listPoem().toString();
+		String result = poemService.findAllPoems().toString();
 		System.out.println("result : " + result);
 	}
 

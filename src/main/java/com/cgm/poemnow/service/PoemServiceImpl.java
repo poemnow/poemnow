@@ -39,4 +39,5 @@ public class PoemServiceImpl implements PoemService {
 	public int removePoem(int id) {
 		return poemMapper.deletePoem(id);
 	}
+
 }

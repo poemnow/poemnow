@@ -13,7 +13,7 @@
         VALUES (
                 #{title},
                 #{content},
-                #{author_id},
+                #{authorId},
                 #{font}
                )
     </insert>

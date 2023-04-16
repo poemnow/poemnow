@@ -1,12 +1,7 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Poem;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
+import com.google.gson.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,8 +29,6 @@ class PoemControllerTest {
     @Test
     @DisplayName("리스트 조회 테스트")
     void poemList() throws Exception{
-
-        //전체 조회 로직 테스트
 
         MvcResult mvcResult = mvc.perform(get("http://127.0.0.1:8080/poem/poemList"))
                 .andExpect(status().isOk())
@@ -68,10 +58,10 @@ class PoemControllerTest {
 
         // given
         Poem newPoem = Poem.builder()
-                .title("저는 1번 시예요")
-                .content("1번시는 이런 시야")
-                .author_id(1)
-                .font("이글씨야")
+                .title("10번 시")
+                .content("십번")
+                .authorId(10)
+                .font("십십해체")
                 .build();
 
         String jsonData = new Gson().toJson(newPoem);
@@ -80,9 +70,6 @@ class PoemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonData))
                 .andExpect(status().isCreated()); // 아래에서 바로 조회까지 할테니 상태코드만 확인
-
-        // 저장된 데이터를 단건으로 조회해도 되지만
-        // 그냥 전체 조회 로직 테스트
 
 
             }
@@ -93,7 +80,7 @@ class PoemControllerTest {
     void poemDetailTest() throws Exception {
 
         // given
-        int id = 2;
+        int id = 10;
 
         MvcResult mvcResult = mvc.perform(get("/poem/poemDetail/" + id))
                 .andExpect(status().isOk())
@@ -105,19 +92,15 @@ class PoemControllerTest {
         Gson gson = new Gson();
         Poem selectedPoem = gson.fromJson(response, Poem.class);
 
-        // 조회된 이름과 비교해줍니다.
-        assertThat(selectedPoem.getId()).isEqualTo(2);
+        assertThat(selectedPoem.getId()).isEqualTo(10);
     }
 
     @Test
     @DisplayName("시 수정 및 조회 확인 테스트")
     void poemUpdateTest() throws Exception {
 
-        // 수정 이전 정보 출력 + 수정 + 수정 후 정보 출력
-
-        // 수정 이전 정보 출력
         // given
-        int id = 3;
+        int id = 5;
 
         System.out.println(":::::::::: before update :::::::::");
 
@@ -127,16 +110,17 @@ class PoemControllerTest {
                 .andReturn();
 
         // given
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        String newTitle = "수정된 시 제목3";
-        String newContent = "이 시에는 이 내용이 어울린다네";
-        params.add("title", newTitle);
-        params.add("content", newContent);
-        params.add("font", "산똘뱅이체");
-        params.add("id", String.valueOf(3));
-        mvc.perform(patch("/poem/poemModify")
-                        .params(params))
-                .andExpect(status().isOk());
+        Poem poem = new Poem();
+        poem.setTitle("5555");
+        poem.setContent("오오오오");
+        poem.setFont("제발되어줘체");
+
+        String jsonData = new Gson().toJson(poem);
+
+        mvc.perform(put("/poem/poemModify/"+id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonData))
+                        .andExpect(status().isOk());
 
         mvc.perform(get("/poem/poemDetail/" + id))
                 .andExpect(status().isOk())
