@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.PoemLikeMapper" >
+
+    <select id="selectPoemLike" resultType="HashMap" parameterType="Integer">
+            SELECT u.user_id userId, l.poem_id poemId FROM poem_like l
+            INNER JOIN user u ON l.user_id = u.id
+            WHERE l.user_id = #{userId}
+    </select>
+
+    <insert id="insertPoemLike" parameterType="com.cgm.poemnow.domain.PoemLike">
+        INSERT INTO poem_like(user_id, poem_id)
+        VALUES (#{userId} , #{poemId})
+    </insert>
+
+    <delete id="deletePoemLike" parameterType="Integer">
+        DELETE FROM poem_like
+        WHERE user_id = #{userId} AND poem_id = #{poemId};
+    </delete>
+
+</mapper>
