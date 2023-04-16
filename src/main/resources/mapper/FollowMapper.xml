@@ -22,4 +22,14 @@
         DELETE FROM follow
         WHERE user_id = 1 AND follow_id = #{followId};
     </delete>
+
+    <select id="selectFollowCnt" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM follow
+        WHERE user_id = #{userId};
+    </select>
+
+    <select id="selectFollowerCnt" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM follow
+        where follow_id = #{userId};
+    </select>
 </mapper>

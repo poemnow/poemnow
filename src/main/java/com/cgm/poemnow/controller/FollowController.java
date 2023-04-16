@@ -47,4 +47,20 @@ public class FollowController {
 		response = followService.findFollower(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	//내 팔로우 수 구하기
+	@GetMapping(path = "/followCnt")
+	public ResponseEntity<Integer> followCnt() {
+		int userId = 1; // httpsesion에서 받아오는 아이디
+		int response = 0;
+		response = followService.findFollowCnt(userId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	//내 팔로워 수 구하기
+	@GetMapping(path = "/followerCnt")
+	public ResponseEntity<Integer> followerCnt() {
+		int userId = 2; // httpsesion에서 받아오는 아이디
+		int response = 0;
+		response = followService.findFollowerCnt(userId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }
