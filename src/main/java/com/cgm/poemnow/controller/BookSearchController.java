@@ -43,11 +43,4 @@ public class BookSearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    시집 검색에 태그 검색이 필요할까?
-//    @GetMapping("/bookSearchByTag/{keyword}")
-//    // 사용자가 입력한 스트링을 포함한 bookList를 요청합니다.
-//    public ResponseEntity<?> bookSearchByTag(@RequestParam String keyword){
-//        List<Book> response = bookSearchService.findBooksByTag(keyword);
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
-//    }
 }
