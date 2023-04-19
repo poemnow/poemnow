@@ -1,6 +1,13 @@
 package com.cgm.poemnow.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.BookPoem;
+import com.cgm.poemnow.domain.BookRequest;
+import com.cgm.poemnow.domain.Poem;
+import com.cgm.poemnow.service.book.BookService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -15,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -32,9 +40,13 @@ class BookControllerTest {
 	BookController bookController;
 
 	@Autowired
+	BookService bookService;
+
+	@Autowired
 	MockMvc mvc;
 
 	@Test
+	@Transactional
 	@DisplayName("시집 추가 및 리스트 조회 테스트")
 	void bookAddAndBookList() throws Exception{
 
@@ -44,11 +56,39 @@ class BookControllerTest {
 				.author("박미정")
 				.build();
 
-		String jsonData = new Gson().toJson(newbook);
+		BookPoem newBookPoem1 = BookPoem.builder()
+				.poemId(1)
+				.poemOrder(2)
+				.build();
+		BookPoem newBookPoem2 = BookPoem.builder()
+				.poemId(2)
+				.poemOrder(3)
+				.build();
+		BookPoem newBookPoem3 = BookPoem.builder()
+				.poemId(3)
+				.poemOrder(4)
+				.build();
+		BookPoem newBookPoem4 = BookPoem.builder()
+				.poemId(13)
+				.poemOrder(5)
+				.build();
+
+		List<BookPoem> bookPoemList = new ArrayList<>();
+
+		bookPoemList.add(newBookPoem1);
+		bookPoemList.add(newBookPoem2);
+		bookPoemList.add(newBookPoem3);
+		bookPoemList.add(newBookPoem4);
+
+		BookRequest bookRequest = new BookRequest();
+		bookRequest.setBookPoemList(bookPoemList);
+		bookRequest.setBook(newbook);
+
+		String jsonDataBook = new Gson().toJson(bookRequest);
 
 		mvc.perform(post("http://127.0.0.1:8080/book/bookAdd")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(jsonData))
+				.content(jsonDataBook))
 				.andExpect(status().isCreated()); // 아래에서 바로 조회까지 할테니 상태코드만 확인
 
 		// 저장된 데이터를 단건으로 조회해도 되지만
@@ -61,13 +101,15 @@ class BookControllerTest {
 
 		String jsonResult = mvcResult.getResponse().getContentAsString();
 
+
+
 		JsonParser jsonParser = new JsonParser();
 		JsonArray jsonArray = jsonParser.parse(jsonResult).getAsJsonArray();
-		Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yy-MM-dd hh;mm:ss").create();
+		Gson gson = new Gson();
 		boolean isContained = false;
 		for (JsonElement jsonElement : jsonArray) {
-			Book book = gson.fromJson(jsonElement, Book.class);
-			if(34==(book.getId())) {
+			int id = gson.fromJson(jsonElement, Book.class).getId();
+			if(63==(id)) {
 				isContained = true;
 				break;
 			}
@@ -77,11 +119,12 @@ class BookControllerTest {
 	}
 
 	@Test
+	@Transactional
 	@DisplayName("시집 id로 조회 테스트")
 	void bookDetailTest() throws Exception {
 
 		// given
-		int id = 3;
+		int id = 63;
 
 		MvcResult mvcResult = mvc.perform(get("/book/bookDetail/" + id))
 				.andExpect(status().isOk())
@@ -94,7 +137,25 @@ class BookControllerTest {
 		Book selectedBook = gson.fromJson(response, Book.class);
 
 		// 조회된 이름과 비교해줍니다.
-		assertThat(selectedBook.getId()).isEqualTo(3);
+		assertThat(selectedBook.getId()).isEqualTo(63);
+
+		MvcResult mvcResult1 = mvc.perform(get("/book/poemListByBookId/"+id))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
+
+		String jsonResult = mvcResult1.getResponse().getContentAsString();
+
+		gson = new GsonBuilder().disableHtmlEscaping().create();
+		JsonParser jsonParser = new JsonParser();
+		JsonArray jsonArray = jsonParser.parse(jsonResult).getAsJsonArray();
+
+		for (JsonElement je: jsonArray){
+			Poem p = gson.fromJson(je, Poem.class);
+			System.out.println(p);
+		}
+
+
 	}
 
 	@Test
@@ -105,7 +166,7 @@ class BookControllerTest {
 
 		// 수정 이전 정보 출력
 		// given
-		int id = 3;
+		int id = 64;
 
 		System.out.println(":::::::::: before update :::::::::");
 
@@ -118,7 +179,7 @@ class BookControllerTest {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		String newTitle = "수정된 시집 제목";
 		params.add("title", newTitle);
-		params.add("id", String.valueOf(3));
+		params.add("id", String.valueOf(id));
 		mvc.perform(patch("/book/bookModify")
 						.params(params))
 				.andExpect(status().isOk());

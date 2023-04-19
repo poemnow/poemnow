@@ -16,8 +16,10 @@ public class Book {
 	private int id;
 	private String title;
 	private String author;
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	private short published;
-	private Timestamp published_at;
+	private Timestamp publishedAt;
+	private String outerColor;
+	private String innerColor;
 
 }
