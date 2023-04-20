@@ -68,6 +68,7 @@ class PoemControllerTest {
                 .content("1번")
                 .userId(1)
                 .font("11해체")
+                .unknown(true)
                 .build();
 
         String jsonData = new Gson().toJson(newPoem);

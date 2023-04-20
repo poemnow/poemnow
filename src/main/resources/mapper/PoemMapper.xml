@@ -8,13 +8,15 @@
                 title,
                 content,
                 user_id,
-                font
+                font,
+                unknown
             )
         VALUES (
                 #{title},
                 #{content},
                 #{userId},
-                #{font}
+                #{font},
+                #{unknown}
                )
     </insert>
 
