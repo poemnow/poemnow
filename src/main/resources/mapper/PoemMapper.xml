@@ -2,8 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.PoemMapper" >
 
-    <select id="poemList" resultType="com.cgm.poemnow.domain.Poem">
-        select * from poem
+    <insert id="insertPoem" parameterType="com.cgm.poemnow.domain.Poem">
+        INSERT INTO poem
+            (
+                title,
+                content,
+                user_id,
+                font,
+                unknown
+            )
+        VALUES (
+                #{title},
+                #{content},
+                #{userId},
+                #{font},
+                #{unknown}
+               )
+    </insert>
+
+    <select id="selectAllPoems" resultType="com.cgm.poemnow.domain.Poem">
+        select * FROM poem
     </select>
+
+    <select id="selectPoemById" parameterType="int" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT *
+        FROM poem
+        WHERE id = #{id}
+    </select>
+
+    <update id="updatePoem" parameterType="com.cgm.poemnow.domain.Poem">
+        UPDATE poem
+        SET title = #{title},
+            content = #{content},
+            font = #{font}
+        WHERE id = #{id}
+    </update>
+
+
+    <delete id="deletePoem" parameterType="int">
+        DELETE
+        FROM poem
+        WHERE id = #{param1}
+    </delete>
 
 </mapper>

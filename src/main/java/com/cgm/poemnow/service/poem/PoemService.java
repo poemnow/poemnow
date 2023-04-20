@@ -1,13 +1,18 @@
-package com.cgm.poemnow.service.poem;
-
-import java.util.List;
+package com.cgm.poemnow.service;
 
 import com.cgm.poemnow.domain.Poem;
 
+import java.util.List;
+
 public interface PoemService {
 
-	List<Poem> listPoem();
+    int addPoem(Poem poem);
 
-	Poem addPoem(Poem poemRequest);
+    List<Poem> findAllPoems();
 
+    Poem findPoemById(int id);
+
+    int modifyPoem(Poem poem);
+
+    int removePoem(int id);
 }
