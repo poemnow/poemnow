@@ -1,4 +1,4 @@
-package com.cgm.poemnow.service;
+package com.cgm.poemnow.service.poem;
 
 import com.cgm.poemnow.domain.Poem;
 import com.cgm.poemnow.mapper.PoemMapper;

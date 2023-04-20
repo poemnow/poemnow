@@ -1,7 +1,7 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Poem;
-import com.cgm.poemnow.service.PoemService;
+import com.cgm.poemnow.service.poem.PoemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
