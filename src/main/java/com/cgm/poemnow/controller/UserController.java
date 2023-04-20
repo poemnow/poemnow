@@ -5,10 +5,9 @@ import com.cgm.poemnow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -77,8 +76,8 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/profile/{id}")
-	public ResponseEntity<?> userModify(@PathVariable("id") String id, @RequestBody User userRequest) {
+	@PostMapping("/profile")
+	public ResponseEntity<?> userModify(@RequestBody User userRequest) {
 		try {
 			userService.modifyUser(userRequest);
 			return new ResponseEntity<>("사용자 정보 업데이트 성공", HttpStatus.ACCEPTED);

@@ -8,10 +8,10 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
 	int insertUser(User user);
-	User selectUserByIdentifierAndPassword(@Param("user_id") String user_id, @Param("password") String password);
-	User getLoggedInUser(String user_id);
-	User selectUserById(String user_id);
+	User selectUserByIdentifierAndPassword(@Param("userId") String userId, @Param("password") String password);
+	User getLoggedInUser(String userId);
+	User selectUserById(String userId);
 	int updateUser(User user);
-	int deleteUser(String user_id);
+	int deleteUser(String userId);
 
 }

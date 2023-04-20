@@ -46,7 +46,11 @@ public class UserServiceImpl implements  UserService {
 			throw new IllegalArgumentException("잘못된 닉네임입니다.");
 		}
 
-		userMapper.insertUser(user);
+		int response = userMapper.insertUser(user);
+
+		if (response == 0) {
+			throw new InternalError("알 수 없는 이유로, 사용자 추가에 실패했습니다.");
+		}
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public class UserServiceImpl implements  UserService {
 //		if (loggedInUser == null) {
 //			return null;
 //		}
-		User userFound = userMapper.selectUserById((userId));
+		User userFound = userMapper.selectUserById(userId);
 		if (userFound == null) {
 			throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
 		}

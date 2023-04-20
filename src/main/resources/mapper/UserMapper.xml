@@ -2,6 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.UserMapper" >
 
+    <resultMap id="userMap" type="com.cgm.poemnow.domain.User">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId" />
+        <result column="user_nickname" property="userNickname"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_birth" property="userBirth"/>
+        <result column="email" property="email"/>
+        <result column="user_phone" property="userPhone"/>
+        <result column="password" property="password"/>
+        <result column="profile_pic" property="profilePic"/>
+        <result column="bio" property="bio"/>
+        <result column="social_url" property="socialUrl"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="follower_cnt" property="followerCnt"/>
+        <result column="following_cnt" property="followingCnt"/>
+        <result column="is_active" property="isActive"/>
+        <result column="is_logged_in" property="isLoggedIn"/>
+    </resultMap>
+
     <insert id="insertUser" parameterType="com.cgm.poemnow.domain.User">
         INSERT INTO user
             (
@@ -14,10 +34,10 @@
              )
         VALUES
             (
-             #{user_id},
-             #{user_nickname},
-             #{user_name},
-             #{user_birth},
+             #{userId},
+             #{userNickname},
+             #{userName},
+             #{userBirth},
              #{email},
              #{password}
              )
@@ -26,33 +46,34 @@
     <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">
         SELECT *
         FROM user
-        WHERE user_id = #{user_id}
+        WHERE user_id = #{userId}
         AND password = #{password}
     </select>
 
     <select id="getLoggedInUser" parameterType="String" resultType="com.cgm.poemnow.domain.User">
         SELECT *
         FROM user
-        WHERE user_id = #{user_id}
-        AND logged_in = TRUE
+        WHERE user_id = #{userId}
+        AND is_logged_in = TRUE
     </select>
 
-    <select id="selectUserById" parameterType="String" resultType="com.cgm.poemnow.domain.User">
+    <select id="selectUserById" parameterType="String" resultMap="userMap">
         SELECT *
         FROM user
-        WHERE user_id = #{user_id}
+        WHERE user_id = #{userId}
     </select>
 
+    <!-- todo: 업데이트 할 때 이메일과 비밀번호를 변경하는 기능도 추가-->
     <update id="updateUser" parameterType="com.cgm.poemnow.domain.User">
         UPDATE user
-        SET user_nickname = #{user_nickname}, profile_pic = #{profile_pic}, bio = #{bio}, social_url = #{social_url}, updated_at = now()
-        WHERE user_id = #{user_id}
+        SET user_nickname = #{userNickname}, profile_pic = #{profilePic}, bio = #{bio}, social_url = #{socialUrl}, updated_at = now()
+        WHERE user_id = #{userId}
     </update>
 
     <update id="deleteUser" parameterType="com.cgm.poemnow.domain.User">
         UPDATE user
-        SET isActive = FALSE
-        WHERE user_id = #{user_id}
+        SET is_active = FALSE
+        WHERE user_id = #{userId}
     </update>
 
 </mapper>

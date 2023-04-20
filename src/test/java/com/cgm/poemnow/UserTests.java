@@ -2,7 +2,6 @@ package com.cgm.poemnow;
 
 import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.mapper.UserMapper;
-import com.cgm.poemnow.service.user.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +38,13 @@ public class UserTests {
 	@Test
 	public void testAddUser() throws Exception {
 		User user = new User();
-		user.setUserId("test_id");
-		user.setPassword("test_passrd");
-		user.setEmail("test@gmail.com");
-		user.setUserNickname("test_nickname");
-		user.setUserName("test_name");
+		// 테스트 전에 아래의 testId를 중복되지 않게 만들어주세요!!!
+		int testId = 2;
+		user.setUserId("test_id" + testId);
+		user.setPassword("test_password");
+		user.setEmail("test" + testId + "@gmail.com");
+		user.setUserNickname("test_nickname" + testId);
+		user.setUserName("test_name" + testId);
 		user.setUserBirth(new Timestamp(System.currentTimeMillis()));
 
 		mockMvc.perform(post("/user/register")
@@ -52,13 +53,16 @@ public class UserTests {
 			.andExpect(status().isCreated());
 
 		User savedUser = userMapper.selectUserById(user.getUserId());
+		System.out.println(savedUser);
 		assertNotNull(savedUser);
 		assertEquals(user.getUserId(), savedUser.getUserId());
 	}
 
 	@Test
 	public void testFindUserById() throws Exception {
-		String userId = "test_id";
+		// 테스트 전에 아래의 testId를 존재하는 사용자로 찾아주세요!!!
+		int testId = 2;
+		String userId = "test_id" + testId;
 
 		MvcResult result = mockMvc.perform(get("/user/profile/" + userId))
 			.andExpect(status().isAccepted())
@@ -72,13 +76,13 @@ public class UserTests {
 	@Test
 	public void testUserModify() throws Exception {
 		User user = new User();
-		user.setUserId("test_id");
+		user.setUserId("test_id1");
 		user.setUserNickname("test_nickname3");
 		user.setProfilePic("test_profile_pic");
 		user.setBio("test_bio");
 		user.setSocialUrl("test_social_url");
 
-		mockMvc.perform(post("/user/profile/" + user.getUserId())
+		mockMvc.perform(post("/user/profile/")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(new ObjectMapper().writeValueAsString(user)))
 			.andExpect(status().isAccepted())
@@ -86,7 +90,7 @@ public class UserTests {
 	}
 	@Test
 	public void testUserWithdraw() throws Exception {
-		String userId = "test_id";
+		String userId = "test_id2";
 		mockMvc.perform(post("/user/withdraw/" + userId))
 			.andExpect(status().isAccepted());
 	}
