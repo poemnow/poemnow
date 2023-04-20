@@ -14,7 +14,7 @@ public class Poem {
 	private int id;
 	private String title;
 	private String content;
-	private int authorId;
+	private int userId;
 	private String createdAt;
 	private String updatedAt;
 	private boolean published;

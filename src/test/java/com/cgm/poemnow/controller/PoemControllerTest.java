@@ -1,7 +1,13 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Poem;
-import com.google.gson.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +49,7 @@ class PoemControllerTest {
         boolean isContained = false;
         for (JsonElement jsonElement : jsonArray) {
             Poem poem = gson.fromJson(jsonElement, Poem.class);
-            if(7==(poem.getId())) {
+            if(1==(poem.getId())) {
                 isContained = true;
                 break;
             }
@@ -58,10 +64,10 @@ class PoemControllerTest {
 
         // given
         Poem newPoem = Poem.builder()
-                .title("10번 시")
-                .content("십번")
-                .authorId(10)
-                .font("십십해체")
+                .title("1번 시")
+                .content("1번")
+                .userId(1)
+                .font("11해체")
                 .build();
 
         String jsonData = new Gson().toJson(newPoem);
@@ -80,7 +86,7 @@ class PoemControllerTest {
     void poemDetailTest() throws Exception {
 
         // given
-        int id = 10;
+        int id = 1;
 
         MvcResult mvcResult = mvc.perform(get("/poem/poemDetail/" + id))
                 .andExpect(status().isOk())
@@ -92,15 +98,15 @@ class PoemControllerTest {
         Gson gson = new Gson();
         Poem selectedPoem = gson.fromJson(response, Poem.class);
 
-        assertThat(selectedPoem.getId()).isEqualTo(10);
+        assertThat(selectedPoem.getId()).isEqualTo(1);
     }
 
     @Test
     @DisplayName("시 수정 및 조회 확인 테스트")
     void poemUpdateTest() throws Exception {
-
+        ObjectMapper objectMapper = new ObjectMapper();
         // given
-        int id = 5;
+        int id = 1;
 
         System.out.println(":::::::::: before update :::::::::");
 
@@ -111,15 +117,14 @@ class PoemControllerTest {
 
         // given
         Poem poem = new Poem();
+        poem.setId(id);
         poem.setTitle("5555");
         poem.setContent("오오오오");
         poem.setFont("제발되어줘체");
 
-        String jsonData = new Gson().toJson(poem);
-
-        mvc.perform(put("/poem/poemModify/"+id)
+        mvc.perform(put("/poem/poemModify/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(jsonData))
+                        .content(objectMapper.writeValueAsString(poem)))
                         .andExpect(status().isOk());
 
         mvc.perform(get("/poem/poemDetail/" + id))

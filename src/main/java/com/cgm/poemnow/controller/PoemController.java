@@ -34,9 +34,8 @@ public class PoemController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PutMapping("/poemModify/{id}")
-	public ResponseEntity<?> poemModify(@RequestBody Poem poemRequest, @PathVariable("id")int id){
-		poemRequest.setId(id);
+	@PutMapping("/poemModify")
+	public ResponseEntity<?> poemModify(@RequestBody Poem poemRequest){
 		int response = poemService.modifyPoem(poemRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}

@@ -12,11 +12,12 @@ public interface PoemMapper {
 
 	int insertPoem(Poem poem);
 
-	public List<Poem> selectAllPoems();
+	List<Poem> selectAllPoems();
 
 	Poem selectPoemById(int id);
 
 	int updatePoem(Poem poem);
 
 	int deletePoem(int id);
+
 }
