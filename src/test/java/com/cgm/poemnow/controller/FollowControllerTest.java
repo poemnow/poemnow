@@ -23,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +87,7 @@ class FollowControllerTest {
         //그걸 객체로 변환시켜서 넣어
         for (JsonElement jsonElement : jsonArray) {
             User users = gson.fromJson(jsonElement, User.class);
-            if ("wns".equals(users.getUser_id())) {
+            if ("wns".equals(users.getUserId())) {
                     isContained = true;
                     break;
             }
@@ -96,69 +98,71 @@ class FollowControllerTest {
     @DisplayName("팔로우 삭제 테스트")
     void followRemove() {
         // given
-        int followId = 3;
+        int followId = 2;
         int userId = 1;
-        when(followService.removeFollow(userId, followId)).thenReturn(1);
-
-        // when
-        ResponseEntity<?> response = followController.followRemove(followId);
-
-        // then
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(1, response.getBody());
+        int response = 1;
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(followService.removeFollow(userId, followId)).thenReturn(response);
+        ResponseEntity<?> result = followController.followRemove(followId, request);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 
     @Mock
     private FollowService followService;
+
+    @Mock
+    private HttpSession session;
+
+    @Mock
+    private HttpServletRequest request;
 
     @InjectMocks
     private FollowController followController;
     @Test
     @DisplayName("팔로워 조회 테스트")
     void followerList() {
-        int userId = 3;
-        List<HashMap<String, String>> followerList = new ArrayList<>();
+        int userId = 1;
+        List<HashMap<String, String>> response = new ArrayList<>();
         HashMap<String, String> follower1 = new HashMap<>();
-        follower1.put("id", "1");
-        follower1.put("name", "John");
-        followerList.add(follower1);
+        follower1.put("id", "2");
+        follower1.put("name", "John Doe");
+        response.add(follower1);
         HashMap<String, String> follower2 = new HashMap<>();
-        follower2.put("id", "2");
-        follower2.put("name", "Jane");
-        followerList.add(follower2);
-        //해당 매서드가 실제로 돌아가면 리턴값을 followerList로 해주겠다 설정
-        //dao가 실제 db를 안갔다 오게 하려고 쓴다
-        when(followService.findFollower(userId)).thenReturn(followerList);
-        //아래 메서드가 실제로 돌아간다면 followList 반환 해야함
-        ResponseEntity<List<HashMap<String, String>>> response = followController.followerList();
-        System.out.println("ewe" + response.getBody());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        //둘이 같다면?? 실제로 돌아갔구나
-        assertEquals(followerList, response.getBody());
+        follower2.put("id", "3");
+        follower2.put("name", "Jane Smith");
+        response.add(follower2);
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(followService.findFollower(userId)).thenReturn(response);
+        ResponseEntity<List<HashMap<String, String>>> result = followController.followerList(request);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 
     @Test
     @DisplayName("팔로우 수 구하기 테스트")
     void testFollowCnt() {
-        int followCnt = 10;
-
-        when(followService.findFollowCnt(anyInt())).thenReturn(followCnt);
-
-        ResponseEntity<Integer> response = followController.followCnt();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(followCnt, response.getBody());
+        int userId = 1;
+        int response = 2;
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(followService.findFollowCnt(userId)).thenReturn(response);
+        ResponseEntity<Integer> result = followController.followCnt(request);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
     @Test
     @DisplayName("팔로워 수 구하기")
     void testFollowerCnt() {
-        int followerCnt = 5;
-
-        when(followService.findFollowerCnt(anyInt())).thenReturn(followerCnt);
-
-        ResponseEntity<Integer> response = followController.followerCnt();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(followerCnt, response.getBody());
+        int userId = 1;
+        int response = 2;
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("userId")).thenReturn(userId);
+        when(followService.findFollowerCnt(userId)).thenReturn(response);
+        ResponseEntity<Integer> result = followController.followerCnt(request);
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
     }
 }
