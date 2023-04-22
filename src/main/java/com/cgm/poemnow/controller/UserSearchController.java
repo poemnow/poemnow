@@ -25,5 +25,4 @@ public class UserSearchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
 }

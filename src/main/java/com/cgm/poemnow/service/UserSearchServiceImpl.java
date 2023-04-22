@@ -18,4 +18,5 @@ public class UserSearchServiceImpl implements UserSearchService {
     public List<User> findUsersByNickname(String keyword, String sortOrder) {
         return userSearchMapper.selectUsersByNickname(keyword, sortOrder);
     }
+
 }

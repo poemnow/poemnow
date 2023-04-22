@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 @Mapper
 public interface  UserSearchMapper {
+
     List<User> selectUsersByNickname(String keyword, String sortOrder);
+    
 }

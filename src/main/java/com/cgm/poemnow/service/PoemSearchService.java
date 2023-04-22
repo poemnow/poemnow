@@ -15,5 +15,4 @@ public interface PoemSearchService {
 
     List<Poem> findPoemsByTag(String keyword, String sortOrder);
 
-
 }
