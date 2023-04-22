@@ -10,7 +10,6 @@ import lombok.Data;
 @Builder
 public class Follow {
 
-	private int id;
 	private int userId;
 	private int followId;
 	private String createdAt;

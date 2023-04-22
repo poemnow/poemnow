@@ -1,7 +1,9 @@
 package com.cgm.poemnow.service;
 
 import com.cgm.poemnow.domain.Follow;
+import com.cgm.poemnow.domain.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface FollowService {
     int findFollowCnt(int userId);
 
 	int findFollowerCnt(int userId);
+
+	boolean loginUser(User user, HttpServletRequest request);
 
 }
