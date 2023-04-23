@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.BookSearchMapper" >
+
+    <select id="selectBooksByTitle" resultType="com.cgm.poemnow.domain.Book">
+        SELECT * FROM book WHERE title LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectBooksByPoem" resultType="com.cgm.poemnow.domain.Book">
+        SELECT book.* FROM book JOIN book_poem bp on book.id = bp.book_id JOIN poem p on bp.poem_id = p.id WHERE p.title LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectBooksByAuthor" resultType="com.cgm.poemnow.domain.Book">
+        SELECT * FROM book WHERE book.author LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+</mapper>

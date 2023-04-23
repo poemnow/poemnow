@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.PoemSearchMapper" >
+
+    <select id="selectPoemsByTitle" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT * FROM poem WHERE title LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectPoemsByContent" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT * FROM poem WHERE content LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectPoemsByTitleAndContent" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT * FROM poem WHERE title LIKE concat('%' , #{keyword}, '%') OR content LIKE concat('%' , #{keyword}, '%') ORDER BY
+        (CASE WHEN title LIKE concat('%' , #{keyword}, '%') AND content LIKE concat('%' , #{keyword}, '%') THEN 0 ELSE 1 END),
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectPoemsByAuthor" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT poem.* FROM poem JOIN user on poem.author_id = user.id WHERE user.user_nickname LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectPoemsByTag" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT poem.* FROM poem JOIN tag_poem tp on poem.id = tp.poem_id JOIN tag on tag.id = tp.tag_id WHERE tag.name LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+</mapper>
