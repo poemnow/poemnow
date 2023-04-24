@@ -65,7 +65,7 @@ public class UserServiceImpl implements  UserService {
 		// 계정 아이디와 비밀번호의 길이를 확인
 		// 아이디가 [4, 20], 비밀번호가 [8, 20]이 아니라면 잘못된 입력이므로 false 반환
 		// + 비밀번호 조건을 만족했는지도 확인해야 할듯
-		if (user.getUserId().length() < 4 || user.getUserId().length() > 20 || user.getPassword().length() < 8 || 16 < user.getPassword().length()) {
+		if (user.getUserId().length() < 4 || user.getUserId().length() > 20 || user.getPassword().length() < 8 || 20 < user.getPassword().length()) {
 			return false;
 		}
 
