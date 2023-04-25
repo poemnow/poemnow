@@ -44,43 +44,52 @@ public class FollowController {
 	}
 
 	//내가 팔로우 한 사람 보기
-	@GetMapping(path = "/followList")
-	public ResponseEntity<List<HashMap<String, String>>> followList(HttpServletRequest request) {
+	@GetMapping(path = {"/followList/{id}","followList"})
+	public ResponseEntity<List<HashMap<String, String>>> followList(HttpServletRequest request,@PathVariable(required = false) String id) {
 		HttpSession session = request.getSession();
 		int userId = (int) session.getAttribute("userId");
+		if(id != null){
+			userId = Integer.parseInt(id);
+		}
 		List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
-
 		response = followService.findFollow(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	//나를 팔로워 한 사람 보기
-	@GetMapping(path = "/followerList")
-	public ResponseEntity<List<HashMap<String, String>>> followerList(HttpServletRequest request) {
+	@GetMapping(path = {"/followerList/{id}","followerList"})
+	public ResponseEntity<List<HashMap<String, String>>> followerList(HttpServletRequest request,@PathVariable(required = false) String id) {
 		HttpSession session = request.getSession();
 		int userId = (int) session.getAttribute("userId");
+		if(id != null){
+			userId = Integer.parseInt(id);
+		}
 		List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
 		response = followService.findFollower(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	//내 팔로우 수 구하기
-	@GetMapping(path = "/followCnt")
-	public ResponseEntity<Integer> followCnt(HttpServletRequest request) {
+	@GetMapping(path = {"/followCnt/{id}","followCnt"})
+	public ResponseEntity<Integer> followCnt(HttpServletRequest request,@PathVariable(required = false) String id) {
 		HttpSession session = request.getSession();
 		int userId = (int) session.getAttribute("userId");
-		int response = 0;
-		response = followService.findFollowCnt(userId);
+		if(id != null){
+			userId = Integer.parseInt(id);
+		}
+		int response = followService.findFollowCnt(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	//내 팔로워 수 구하기
-	@GetMapping(path = "/followerCnt")
-	public ResponseEntity<Integer> followerCnt(HttpServletRequest request) {
+	@GetMapping(path = {"/followerCnt/{id}","followerCnt"})
+	public ResponseEntity<Integer> followerCnt(HttpServletRequest request,@PathVariable(required = false) String id) {
 		HttpSession session = request.getSession();
 		int userId = (int) session.getAttribute("userId");
-		int response = 0;
-		response = followService.findFollowerCnt(userId);
+		if(id != null){
+			userId = Integer.parseInt(id);
+		}
+		int response = followService.findFollowerCnt(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

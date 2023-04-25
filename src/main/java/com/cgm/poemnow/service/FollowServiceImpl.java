@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
+
 @Service
 @Transactional
 public class FollowServiceImpl implements FollowService {
@@ -24,8 +25,7 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public List<HashMap<String, String>> findFollow(int userId) {
-		return followMapper.selectFollow(userId);
+	public List<HashMap<String, String>> findFollow(int userId) { return followMapper.selectFollow(userId);
 	}
 
 	@Override

@@ -136,7 +136,7 @@ class FollowControllerTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("userId")).thenReturn(userId);
         when(followService.findFollower(userId)).thenReturn(response);
-        ResponseEntity<List<HashMap<String, String>>> result = followController.followerList(request);
+        ResponseEntity<List<HashMap<String, String>>> result = followController.followerList(request,"");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(response, result.getBody());
     }
@@ -149,7 +149,7 @@ class FollowControllerTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("userId")).thenReturn(userId);
         when(followService.findFollowCnt(userId)).thenReturn(response);
-        ResponseEntity<Integer> result = followController.followCnt(request);
+        ResponseEntity<Integer> result = followController.followCnt(request,"");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(response, result.getBody());
     }
@@ -161,7 +161,7 @@ class FollowControllerTest {
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("userId")).thenReturn(userId);
         when(followService.findFollowerCnt(userId)).thenReturn(response);
-        ResponseEntity<Integer> result = followController.followerCnt(request);
+        ResponseEntity<Integer> result = followController.followerCnt(request,"");
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals(response, result.getBody());
     }
