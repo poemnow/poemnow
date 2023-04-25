@@ -41,4 +41,16 @@ public class CommentController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@PutMapping("/userCommentRemove")
+	public ResponseEntity<?> userCommentRemove(@RequestBody int userId) {
+		int response = commentService.removeCommentsByUserId(userId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/myComments")
+	public ResponseEntity<List<Comment>> myCommentList(@RequestParam(value="peomId") int poemId){
+		List<Comment> response = commentService.findCommentsOfThePoem(poemId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }

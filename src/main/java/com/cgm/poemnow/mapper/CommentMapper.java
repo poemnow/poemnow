@@ -18,4 +18,8 @@ public interface CommentMapper {
 
 	int deleteComment(Comment comment);
 
+	List<Comment> selectCommentsOfThePoem(int poemId);
+
+	int deleteCommentsByUserId(int userId);
+
 }

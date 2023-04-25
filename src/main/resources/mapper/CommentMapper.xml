@@ -32,9 +32,18 @@
     </insert>
 
     <select id="selectAllComments" resultMap="commentMap">
-        SELECT c.id, c.content, c.created_at, c.updated_at, u.user_nickname, c.deleted
+        SELECT *
         FROM comment c
-        INNER JOIN user u ON c.user_id = u.id
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.user_id IS NOT NULL
+    </select>
+
+    <select id="selectCommentsOfThePoem" parameterType = "int" resultMap="commentMap">
+        SELECT *
+        FROM comment c
+        LEFT JOIN poem p ON c.poem_id = p.id
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.deleted = false AND c.poem_id = #{poemId} AND u.id IS NOT NULL AND p.id IS NOT NULL
     </select>
 
     <update id="updateComment" parameterType="com.cgm.poemnow.domain.Comment">
@@ -47,6 +56,10 @@
         UPDATE comment
         SET deleted = 1
         WHERE id = #{id}
+    </update>
+
+    <update id="deleteCommentsByUserId" parameterType="int">
+        UPDATE comment SET deleted = 1 WHERE user_id = #{userId}
     </update>
 
 </mapper>

@@ -14,4 +14,8 @@ public interface CommentService {
 
 	int removeComment(Comment comment);
 
+	List<Comment> findCommentsOfThePoem(int poemId);
+
+	int removeCommentsByUserId(int userId);
+
 }

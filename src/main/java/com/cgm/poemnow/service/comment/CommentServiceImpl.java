@@ -35,4 +35,13 @@ public class CommentServiceImpl implements CommentService{
 		return commentMapper.deleteComment(comment);
 	}
 
+	@Override
+	public List<Comment> findCommentsOfThePoem(int poemId){
+		return commentMapper.selectCommentsOfThePoem(poemId);
+	}
+	@Override
+	public int removeCommentsByUserId(int userId) {
+		return commentMapper.deleteCommentsByUserId(userId);
+	}
+
 }
