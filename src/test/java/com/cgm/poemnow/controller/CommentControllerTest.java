@@ -1,11 +1,12 @@
 package com.cgm.poemnow.controller;
-
 import com.cgm.poemnow.domain.Comment;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,9 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -142,6 +148,48 @@ class CommentControllerTest {
 				.andDo(print())
 				.andExpect(jsonPath("$.[?(@.id == 10)].deleted").value(true));
 
+	}
+
+	@Test
+	@DisplayName("user_id로 삭제 테스트")
+	public void commentRemoveByUserIdTest() throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		int userId = 1;
+
+		// 댓글 삭제 전 리스트에서 확인
+		mvc.perform(put("/comment/userCommentRemove")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(String.valueOf(userId)))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
+
+
+		// 댓글 삭제 후 리스트에서 확인
+		mvc.perform(get("/comment/commentList"))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
+
+	}
+
+	@Test
+	@DisplayName("poem_id로 조회 테스트")
+	public void myCommentListTest() throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+//		int poemId = 2;
+
+
+		// 댓글 삭제 전 리스트에서 확인
+		mvc.perform(get("http://localhost:8080/comment/myComments?peomId=2")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andReturn();
 	}
 
 }
