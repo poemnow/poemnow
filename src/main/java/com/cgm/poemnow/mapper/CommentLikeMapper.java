@@ -1,6 +1,7 @@
 package com.cgm.poemnow.mapper;
 
-import com.cgm.poemnow.domain.CommentLike;
+import com.cgm.poemnow.domain.Like.CommentLike;
+import com.cgm.poemnow.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,5 @@ public interface CommentLikeMapper {
     int deleteCommentLike(int userId, int commentId);
     List<HashMap<?, ?>> selectCommentLike(int userId);
 
+    User selectUserByIdentifierAndPassword(String userId, String password);
 }

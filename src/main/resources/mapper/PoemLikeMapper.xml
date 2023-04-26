@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.PoemLikeMapper" >
 
@@ -8,14 +8,21 @@
             WHERE l.user_id = #{userId}
     </select>
 
-    <insert id="insertPoemLike" parameterType="com.cgm.poemnow.domain.PoemLike">
+    <insert id="insertPoemLike" parameterType="com.cgm.poemnow.domain.Like.PoemLike">
         INSERT INTO poem_like(user_id, poem_id)
         VALUES (#{userId} , #{poemId})
     </insert>
 
-    <delete id="deletePoemLike" parameterType="Integer">
+    <delete id="deletePoemLike" parameterType="java.util.Map">
         DELETE FROM poem_like
         WHERE user_id = #{userId} AND poem_id = #{poemId};
     </delete>
+
+    <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">
+        SELECT *
+        FROM user
+        WHERE user_id = #{userId}
+        AND password = #{password}
+    </select>
 
 </mapper>
