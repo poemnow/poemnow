@@ -1,12 +1,15 @@
-package com.cgm.poemnow.controller;
+package com.cgm.poemnow.controller.Like;
 
-import com.cgm.poemnow.domain.PoemLike;
-import com.cgm.poemnow.service.PoemLikeService;
+import com.cgm.poemnow.domain.Like.PoemLike;
+import com.cgm.poemnow.domain.User;
+import com.cgm.poemnow.service.Like.PoemLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +18,12 @@ import java.util.List;
 public class PoemLikeController {
     @Autowired
     private PoemLikeService poemLikeService;
+
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest request){
+        boolean isSuccess = poemLikeService.loginUser(user, request);
+        return new ResponseEntity<>(isSuccess, HttpStatus.ACCEPTED);
+    }
 
     //  Like!!
     @PostMapping(path = "/poemLikeAdd")
@@ -27,9 +36,10 @@ public class PoemLikeController {
 
     // Unlike!!
     @DeleteMapping(path = "/poemLikeRemove")
-    public ResponseEntity<?> poemLikeRemove(@RequestParam(value = "poemId") int poemId){
+    public ResponseEntity<?> poemLikeRemove(@RequestParam int poemId, HttpServletRequest request){
 
-        int userId = 1; // 세션에서 받아 옴
+        HttpSession session = request.getSession();
+        int userId = ((User) session.getAttribute("loginUser")).getId();  // 세션에서 받아 옴
         int response = poemLikeService.removePoemLike(userId, poemId);
         return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -37,9 +47,9 @@ public class PoemLikeController {
 
     // 내가 좋아요한 시 보기
     @GetMapping(path = "/likePoemList")
-    public ResponseEntity<List<HashMap<?, ?>>> likePoemList(){
-
-        int userId = 1; // 세션에서 받아 옴
+    public ResponseEntity<List<HashMap<?, ?>>> likePoemList(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        int userId = ((User) session.getAttribute("loginUser")).getId(); // 세션에서 받아 옴
         List<HashMap<?, ?>> response = poemLikeService.findPoemLike(userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
 

@@ -1,4 +1,4 @@
-package com.cgm.poemnow.domain;
+package com.cgm.poemnow.domain.Like;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,10 @@ import lombok.Builder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentLike {
+public class PoemLike {
 
     private int userId;
-    private int commentId;
+    private int poemId;
     private String createAt;
 
 }
