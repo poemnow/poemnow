@@ -1,7 +1,6 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Follow;
-import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.service.FollowService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
