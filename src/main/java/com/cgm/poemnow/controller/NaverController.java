@@ -45,7 +45,7 @@ public class NaverController {
 	}
 
 	@GetMapping(path = "/naverCallback")
-	public ResponseEntity<String> kakaoCallback(@RequestParam String state, @RequestParam String code, HttpSession session) {
+	public ResponseEntity<String> naverCallback(@RequestParam String state, @RequestParam String code, HttpSession session) {
 		String token = naverLoginService.getToken(state, code);
 		String id = naverLoginService.getUserInfo(token);
 		System.out.println(id);
