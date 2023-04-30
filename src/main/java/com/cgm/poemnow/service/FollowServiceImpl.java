@@ -55,7 +55,7 @@ public class FollowServiceImpl implements FollowService {
 				user.getPassword()
 		);
 		HttpSession session = request.getSession();
-		session.setAttribute("userId",loginUser.getId());
+		session.setAttribute("loginUser",loginUser);
 		return true;
 	}
 
