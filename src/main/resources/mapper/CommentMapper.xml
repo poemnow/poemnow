@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cgm.poemnow.mapper.CommentMapper" >
+
+    <resultMap id="commentMap" type="com.cgm.poemnow.domain.Comment">
+        <result column="id" property="id"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="poem_id" property="poemId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <insert id="insertComment" parameterType="com.cgm.poemnow.domain.Comment">
+        INSERT INTO comment
+            (
+            content,
+            user_id,
+            poem_id,
+            created_at,
+            deleted
+            )
+        VALUES
+            (
+            #{content},
+            #{userId},
+            #{poemId},
+            CURRENT_TIME(),
+            FALSE
+            )
+    </insert>
+
+    <select id="selectAllComments" resultMap="commentMap">
+        SELECT *
+        FROM comment c
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.user_id IS NOT NULL
+    </select>
+
+    <select id="selectCommentsOfThePoem" parameterType = "int" resultMap="commentMap">
+        SELECT *
+        FROM comment c
+        LEFT JOIN poem p ON c.poem_id = p.id
+        LEFT JOIN user u ON c.user_id = u.id
+        WHERE c.deleted = false AND c.poem_id = #{poemId} AND u.id IS NOT NULL AND p.id IS NOT NULL
+    </select>
+
+    <update id="updateComment" parameterType="com.cgm.poemnow.domain.Comment">
+        UPDATE comment
+        SET content = #{content}, updated_at = CURRENT_TIME()
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteComment" parameterType="com.cgm.poemnow.domain.Comment">
+        UPDATE comment
+        SET deleted = 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteCommentsByUserId" parameterType="int">
+        UPDATE comment SET deleted = 1 WHERE user_id = #{userId}
+    </update>
+
+</mapper>
