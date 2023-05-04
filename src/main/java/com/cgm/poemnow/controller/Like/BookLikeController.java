@@ -15,40 +15,61 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Booklike")
+@RequestMapping("/book-like")
 public class BookLikeController {
 
     @Autowired
     private BookLikeService booklikeService;
 
-    @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest request){
-        boolean isSuccess = booklikeService.loginUser(user, request);
-        return new ResponseEntity<>(isSuccess, HttpStatus.ACCEPTED);
-    }
-
     //  Like!!
-    @PostMapping(path = "/bookLikeAdd")
-    public ResponseEntity<?> bookLikeAdd(@RequestBody BookLike likeRequest){
+    @PostMapping(path = "")
+    public ResponseEntity<?> bookLikeAdd(@RequestBody BookLike likeRequest, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loginUser");
+        likeRequest.setUserId(user.getId());
+//        if(user.getId() == likeRequest.getUserId()){
+//            // 좋아요 하는 유저 아이디(주요키)랑 세션에 로그인된 유저 아이디(주요키)랑 같을 때
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
         int response = booklikeService.addBookLike(likeRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED); // 새로운 레코드 만들어야 돼서
     }
 
     // Unlike!!
-    @DeleteMapping(path = "/bookLikeRemove")
-    public ResponseEntity<?> bookLikeRemove(@RequestParam(value = "bookId") int bookId, HttpServletRequest request){
+    @DeleteMapping(path = "/{bookId}")
+    public ResponseEntity<?> bookLikeRemove(@PathVariable String bookId, HttpServletRequest request){
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId"); // 세션에서 받아 옴
-        int response = booklikeService.removeBookLike(userId, bookId);
+        User user = (User) session.getAttribute("loginUser");
+        int response = booklikeService.removeBookLike(user.getId(), Integer.parseInt(bookId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 내가 좋아요한 시 보기
-    @GetMapping(path = "/likeBookList")
+    // 내가 좋아요한 시집 보기
+    @GetMapping(path = {"/book", "/book-like/book/{id}"})
     public ResponseEntity<List<HashMap<?, ?>>> likeBookList(HttpServletRequest request){
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId"); // 세션에서 받아 옴
-        List<HashMap<?, ?>> response = booklikeService.findBookLike(userId);
+        User user = (User) session.getAttribute("loginUser");
+        List<HashMap<?, ?>> response = booklikeService.findBookLike(user.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    // 시집 별 좋아요 수 구하기
+    @GetMapping(path = {"/book/count/{bookId}", "/book/count/{bookId}"})
+    public ResponseEntity<Integer> likeBookBookCnt(@PathVariable(required = false) int bookId) {
+        int response = booklikeService.findBookLikeBookCount(bookId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    // 내가 좋아요한 시집 수 구하기
+    @GetMapping(path = {"/user/count/{id}", "/user/count"})
+    public ResponseEntity<Integer> likeBookUserCnt(HttpServletRequest request, @PathVariable(required = false) String id) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loginUser");
+
+        if(id != null ){
+            user.setId(Integer.parseInt(id));
+        }
+        int response = booklikeService.findBookLikeUserCount(user.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

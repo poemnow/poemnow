@@ -18,11 +18,10 @@
         WHERE user_id = #{userId} AND comment_id = #{commentId};
     </delete>
 
-<!--    <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">-->
-<!--        SELECT *-->
-<!--        FROM user-->
-<!--        WHERE user_id = #{userId}-->
-<!--          AND password = #{password}-->
-<!--    </select>-->
+    <select id="selectCommentLikeCnt" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM comment_like
+        WHERE user_id = #{commentId}
+
+    </select>
 
 </mapper>

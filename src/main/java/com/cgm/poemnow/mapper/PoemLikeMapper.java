@@ -18,6 +18,7 @@ public interface PoemLikeMapper {
 
     List<HashMap<?, ?>> selectPoemLike(int userId);
 
-    User selectUserByIdentifierAndPassword(String userId, String password);
+	int selectPoemLikeUserCount(int userId);
 
+	int selectPoemLikePoemCount(int poemId);
 }

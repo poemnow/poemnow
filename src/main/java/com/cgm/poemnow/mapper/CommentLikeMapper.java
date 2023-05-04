@@ -15,6 +15,5 @@ public interface CommentLikeMapper {
     int insertCommentLike(CommentLike likeRequest);
     int deleteCommentLike(int userId, int commentId);
     List<HashMap<?, ?>> selectCommentLike(int userId);
-
-    User selectUserByIdentifierAndPassword(String userId, String password);
+    int selectCommentLikeCnt(int commentId);
 }

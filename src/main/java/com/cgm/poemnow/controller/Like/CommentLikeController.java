@@ -14,37 +14,50 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/commentlike")
+@RequestMapping("/comment-like")
 public class CommentLikeController {
 
     @Autowired
-    private CommentLikeService CommentlikeService;
+    private CommentLikeService commentlikeService;
 
-    @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody User user, HttpServletRequest request){
-        boolean isSuccess = CommentlikeService.loginUser(user, request);
-        return new ResponseEntity<>(isSuccess, HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping(path = "/CommentLikeAdd")
-    public ResponseEntity<?> CommentLikeAdd(@RequestBody CommentLike likeRequest){
-        int response = CommentlikeService.addCommentLike(likeRequest);
+    // 댓글 좋아요 추가
+    @PostMapping(path = "")
+    public ResponseEntity<?> CommentLikeAdd(@RequestBody CommentLike likeRequest, HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loginUser");
+        likeRequest.setUserId(user.getId());
+        int response = commentlikeService.addCommentLike(likeRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping(path = "/CommentLikeRemove")
-    public ResponseEntity<?> poemLikeRemove(@RequestParam(value = "commentId") int commentId, HttpServletRequest request){
+    // 댓글 좋아요 취소
+    @DeleteMapping(path = "/{commentId}")
+    public ResponseEntity<?> poemLikeRemove(@PathVariable String commentId, HttpServletRequest request){
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId");
-        int response = CommentlikeService.removeCommentLike(userId, commentId);
+        User user = (User) session.getAttribute("loginUser");
+        int response = commentlikeService.removeCommentLike(user.getId(), Integer.parseInt(commentId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/likeCommentList")
+    // 내가 좋아요한 댓글 보기
+    @GetMapping(path = {"/comment", "/comment/{id}"})
     public ResponseEntity<List<HashMap<?, ?>>> likeCommentList(HttpServletRequest request){
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId");
-        List<HashMap<?, ?>> response = CommentlikeService.findCommentLike(userId);
+        User user = (User) session.getAttribute("loginUser");
+        List<HashMap<?, ?>> response = commentlikeService.findCommentLike(user.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // 댓글 좋아요 수 구하기
+    @GetMapping(path = {"likeCommentCnt/{id}", "likeCommentCnt"})
+    public ResponseEntity<Integer> likeCommentCnt(HttpServletRequest request, @PathVariable(required = false) String id) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("loginUser");
+
+        if(id != null ){
+            user.setId(Integer.parseInt(id));
+        }
+        int response = commentlikeService.findCommentLikeCnt(user.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

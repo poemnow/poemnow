@@ -45,7 +45,10 @@ public class FollowController {
 	public ResponseEntity<?> followRemove(@RequestParam int followId,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("loginUser");
-		int response = followService.removeFollow(user.getId(), followId);
+		Follow follow = new Follow();
+		follow.setFollowId(followId);
+		follow.setUserId(user.getId());
+		int response = followService.removeFollow(follow);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

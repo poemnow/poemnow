@@ -30,6 +30,7 @@
              user_name,
              user_birth,
              email,
+             user_phone,
              password
              )
         VALUES
@@ -37,11 +38,18 @@
              #{userId},
              #{userNickname},
              #{userName},
-             #{userBirth},
+             #{userBirth, jdbcType=TIMESTAMP},
              #{email},
+             #{userPhone},
              #{password}
              )
     </insert>
+
+    <update id="updateLoggedIn" parameterType="com.cgm.poemnow.domain.User">
+        UPDATE user
+        SET is_logged_in = #{isLoggedIn}
+        WHERE user_id = #{userId}
+    </update>
 
     <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">
         SELECT *
@@ -75,5 +83,13 @@
         SET is_active = FALSE
         WHERE user_id = #{userId}
     </update>
+
+    <select id="selectUsersByNickname" resultType="com.cgm.poemnow.domain.User">
+        SELECT * FROM user WHERE user_nickname LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'follower_cnt'"> follower_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
 
 </mapper>

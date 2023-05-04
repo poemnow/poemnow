@@ -14,7 +14,7 @@ public interface PoemLikeService {
     int removePoemLike(int userId, int poemId);
 
     List<HashMap<?, ?>> findPoemLike(int userId);
-
-    boolean loginUser(User user, HttpServletRequest request);
+    int findPoemLikeUserCount(int userId);
+    int findPoemLikePoemCount(int poemId);
 
 }
