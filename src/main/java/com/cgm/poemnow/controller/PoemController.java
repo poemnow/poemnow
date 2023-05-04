@@ -1,6 +1,7 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Poem;
+import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.service.poem.PoemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/poem")
 public class PoemController {
@@ -16,8 +20,15 @@ public class PoemController {
 	@Autowired
 	private PoemService poemService;
 
+	// 시 등록(세션에 담긴 로그인한 유저 정보로 등록)
 	@PostMapping("/poemAdd")
-	public ResponseEntity<?> poemAdd(@RequestBody Poem poemRequest){
+	public ResponseEntity<?> poemAdd(@RequestBody Poem poemRequest, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if (session.getAttribute("loginUser")==null){
+			System.out.println("로그인 안 되어 있음 - 시 등록 불가");
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		poemRequest.setUserId(((User)session.getAttribute("loginUser")).getId());
 		int response = poemService.addPoem(poemRequest);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

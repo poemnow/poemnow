@@ -13,7 +13,7 @@ public interface FollowService {
 
 	List<HashMap<String, String>> findFollow(int userId);
 
-	int removeFollow( int userId , int followId);
+	int removeFollow( Follow follow );
 
 	List<HashMap<String, String>> findFollower(int userId);
 

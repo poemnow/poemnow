@@ -35,14 +35,14 @@ public class PoemLikeServiceImpl implements PoemLikeService {
     }
 
     @Override
-    public boolean loginUser(User user, HttpServletRequest request) {
-        System.out.println(user.getUserId() + user.getPassword() );
-        User loginUser = poemLikeMapper.selectUserByIdentifierAndPassword(
-                user.getUserId(),
-                user.getPassword()
-        );
-        HttpSession session = request.getSession();
-        session.setAttribute("loginUser",loginUser);
-        return true;
+    public int findPoemLikeUserCount(int userId) {
+        return poemLikeMapper.selectPoemLikeUserCount(userId);
     }
+
+    @Override
+    public int findPoemLikePoemCount(int poemId) {
+        return poemLikeMapper.selectPoemLikePoemCount(poemId);
+    }
+
+
 }

@@ -1,14 +1,11 @@
 package com.cgm.poemnow.service.Like;
 
 import com.cgm.poemnow.domain.Like.CommentLike;
-import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.mapper.CommentLikeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,14 +31,8 @@ public class CommentLikeServiceImpl implements CommentLikeService {
     }
 
     @Override
-    public boolean loginUser(User user, HttpServletRequest request) {
-        User loginUser = commentLikeMapper.selectUserByIdentifierAndPassword(
-                user.getUserId(),
-                user.getPassword()
-        );
-        HttpSession session = request.getSession();
-        session.setAttribute("loginUser",loginUser.getId());
-        return true;
+    public int findCommentLikeCnt(int commentId) {
+        return commentLikeMapper.selectCommentLikeCnt(commentId);
     }
 
 }

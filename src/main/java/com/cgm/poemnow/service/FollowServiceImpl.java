@@ -29,8 +29,8 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public int removeFollow( int userId , int followId) {
-		return followMapper.deleteFollow(userId, followId);
+	public int removeFollow( Follow follow ) {
+		return followMapper.deleteFollow(follow);
 	}
 
 	@Override

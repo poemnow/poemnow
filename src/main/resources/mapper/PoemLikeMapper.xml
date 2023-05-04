@@ -18,11 +18,14 @@
         WHERE user_id = #{userId} AND poem_id = #{poemId};
     </delete>
 
-    <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">
-        SELECT *
-        FROM user
+    <select id="selectPoemLikeUserCount" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM poem_like
         WHERE user_id = #{userId}
-        AND password = #{password}
+    </select>
+
+    <select id="selectPoemLikePoemCnt" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM poem_like
+        WHERE poem_id = #{poemId}
     </select>
 
 </mapper>

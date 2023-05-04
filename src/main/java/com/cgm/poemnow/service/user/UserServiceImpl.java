@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +47,9 @@ public class UserServiceImpl implements  UserService {
 			throw new IllegalArgumentException("잘못된 닉네임입니다.");
 		}
 
+//		Date birth = new DateFormat()
 		int response = userMapper.insertUser(user);
+
 
 		if (response == 0) {
 			throw new InternalError("알 수 없는 이유로, 사용자 추가에 실패했습니다.");
@@ -92,9 +95,23 @@ public class UserServiceImpl implements  UserService {
 //		// 생성된 쿠키를 HTTP 응답에 추가합니다.
 //		response.addCookie(userCookie);
 
-		// 여러 계정의 로그인을 위해 세션에 사용자 id를 추가해서 저장
-		// 아이디는 이미 공개된 정보라 세션 key로 사용해도 괜찮을듯
-		httpSession.setAttribute("loginUser_" + loginUser.getUserId(), loginUser.getUserId());
+		// 로그인 가능하므로 로그인처리를 위해 true로 변경
+		loginUser.setLoggedIn(true);
+
+		// 여러 계정의 로그인을 위해 세션에 사용자를 추가해서 저장
+		httpSession.setAttribute("loginUser", loginUser);
+		return true;
+	}
+
+	@Override
+	public boolean convertLoggedIn(User user) {
+		if(user.isLoggedIn()){
+			user.setLoggedIn(false);
+			userMapper.updateLoggedIn(user);
+			return true;
+		}
+		user.setLoggedIn(true);
+		userMapper.updateLoggedIn(user);
 		return true;
 	}
 
@@ -106,12 +123,13 @@ public class UserServiceImpl implements  UserService {
 
 	@Override
 	public boolean logoutUser(User user) {
-		String loginUserId = (String) httpSession.getAttribute("loginUser_" + user.getUserId());
+		String loginUserId = (String) httpSession.getAttribute("loginUser");
 		// 로그인 하지 않은 사용자거나, 요청을 보낸 사람과 로그 아웃 대상이 다른 경우 명령을 실행하지 않는다.
 		if (loginUserId == null || loginUserId.equals(user.getUserId())) {
 			return false;
 		}
-		httpSession.removeAttribute("loginUser_" + user.getUserId());
+
+		httpSession.removeAttribute("loginUser");
 		return true;
 	}
 
@@ -190,6 +208,11 @@ public class UserServiceImpl implements  UserService {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	@Override
+	public List<User> findUsersByNickname(String keyword, String sortOrder) {
+		return userMapper.selectUsersByNickname(keyword, sortOrder);
 	}
 
 }

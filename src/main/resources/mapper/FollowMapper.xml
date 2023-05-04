@@ -19,9 +19,9 @@
         VALUES (#{userId} , #{followId})
     </insert>
 
-    <delete id="deleteFollow" parameterType="int">
+    <delete id="deleteFollow" parameterType="com.cgm.poemnow.domain.Follow">
         DELETE FROM follow
-        WHERE user_id = 1 AND follow_id = #{followId};
+        WHERE user_id = #{userId} AND follow_id = #{followId};
     </delete>
 
     <select id="selectFollowCnt" resultType="Integer" parameterType="Integer">

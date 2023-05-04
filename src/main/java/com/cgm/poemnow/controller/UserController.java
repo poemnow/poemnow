@@ -1,5 +1,7 @@
 package com.cgm.poemnow.controller;
 
+import java.util.List;
+
 import com.cgm.poemnow.domain.User;
 import com.cgm.poemnow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,8 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping("/register")
+	// 회원가입
+	@PostMapping("/")
 	public ResponseEntity<Object> userAdd(@RequestBody User userRequest) {
 		try {
 			userService.addUser(userRequest);
@@ -26,19 +29,21 @@ public class UserController {
 		}
 	}
 
+	// 로그인
 	@PostMapping("/login")
 	public ResponseEntity<User> userLogin(@RequestBody User userRequest) {
 		boolean isSuccess = userService.loginUser(userRequest);
 		if (!isSuccess) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		User loginedUser = userService.findUserById(userRequest.getUserId());
-		if (loginedUser == null) {
+		User loginUser = userService.findUserById(userRequest.getUserId());
+		if (loginUser == null) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>(loginedUser, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(loginUser, HttpStatus.ACCEPTED);
 	}
 
+	// 로그아웃
 	@PostMapping("/logout")
 	public ResponseEntity<User> userLogout(@RequestBody User userRequest) {
 		boolean isSuccess = userService.logoutUser(userRequest);
@@ -52,31 +57,8 @@ public class UserController {
 		return new ResponseEntity<>(logoutedUser, HttpStatus.ACCEPTED);
 	}
 
-	@PostMapping("/withdraw/{id}")
-	public ResponseEntity<?> userRemove(@PathVariable("id") String id) {
-		try {
-			userService.removeUser(id);
-			return new ResponseEntity<>("사용자 탈퇴 성공", HttpStatus.ACCEPTED);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping("/profile/{id}")
-	public ResponseEntity<?> userDetail(@PathVariable("id") String id) {
-		try {
-			User user = userService.findUserById(id);
-			return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@PostMapping("/profile")
+	// 유저 수정
+	@PutMapping ("/")
 	public ResponseEntity<?> userModify(@RequestBody User userRequest) {
 		try {
 			userService.modifyUser(userRequest);
@@ -88,8 +70,40 @@ public class UserController {
 		}
 	}
 
-	// 소셜 로그인 추후 구현
+	// 유저 탈퇴
+	@PatchMapping("/withdraw/{id}")
+	public ResponseEntity<?> userRemove(@PathVariable("id") String id) {
+		try {
+			userService.removeUser(id);
+			return new ResponseEntity<>("사용자 탈퇴 성공", HttpStatus.ACCEPTED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-	// 본인 인증 추후 구현
+	// 유저 상세보기
+	@GetMapping("/{id}")
+	public ResponseEntity<?> userDetail(@PathVariable("id") String id) {
+		try {
+			User user = userService.findUserById(id);
+			return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	// 닉네임으로 유저 리스트
+	@GetMapping("/nickname")
+	public ResponseEntity<?> poemSearchByTitle(
+			@RequestParam(value = "keyword") String keyword,
+			@RequestParam(value = "sortOrder", required = false, defaultValue = "lastest") String sortOrder
+	){
+		List<User> response = userService.findUsersByNickname(keyword, sortOrder);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 
 }
