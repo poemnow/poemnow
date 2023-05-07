@@ -16,4 +16,6 @@ public interface CommentLikeMapper {
     int deleteCommentLike(int userId, int commentId);
     List<HashMap<?, ?>> selectCommentLike(int userId);
     int selectCommentLikeCnt(int commentId);
+
+    int selectCommentLikeUserCnt(int commentId);
 }

@@ -11,4 +11,6 @@ public interface CommentLikeService {
     int removeCommentLike(int userId, int commentId);
     List<HashMap<?, ?>> findCommentLike(int userId);
     int findCommentLikeCnt(int commentId);
+
+    int findCommentLikeUserCount(int commentId);
 }

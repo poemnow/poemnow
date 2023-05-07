@@ -3,9 +3,15 @@
 <mapper namespace="com.cgm.poemnow.mapper.CommentLikeMapper" >
 
     <select id="selectCommentLike" resultType="HashMap" parameterType="Integer">
-        SELECT u.user_id userId, l.comment_id commentId FROM comment_like l
-        INNER JOIN user u ON l.user_id = u.id
+        SELECT u.id , u.user_nickname, comment_id, c.content, c.created_at,p.title,
+               (SELECT uu.user_nickname FROM poem pp
+                                                 INNER JOIN user uu ON uu.id = pp.user_id
+                where pp.id = p.id) as nickname FROM comment_like l
+                                                         INNER JOIN user u ON l.user_id = u.id
+                                                         INNER JOIN comment c ON c.id = l.comment_id
+                                                         INNER JOIN poem p ON p.id = c.poem_id
         WHERE l.user_id = #{userId}
+        AND c.deleted = 0;
     </select>
 
     <insert id="insertCommentLike" parameterType="com.cgm.poemnow.domain.Like.PoemLike">
@@ -21,7 +27,11 @@
     <select id="selectCommentLikeCnt" resultType="Integer" parameterType="Integer">
         SELECT COUNT(*) FROM comment_like
         WHERE user_id = #{commentId}
+    </select>
 
+    <select id="selectCommentLikeUserCnt" resultType="Integer" parameterType="Integer">
+        SELECT COUNT(*) FROM comment_like
+        WHERE comment_id = #{commentId}
     </select>
 
 </mapper>

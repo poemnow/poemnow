@@ -48,8 +48,8 @@ public class CommentLikeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 댓글 좋아요 수 구하기
-    @GetMapping(path = {"likeCommentCnt/{id}", "likeCommentCnt"})
+    //  좋아요 한 댓글 수 구하기
+    @GetMapping(path = {"comment/count/{id}", "comment/count"})
     public ResponseEntity<Integer> likeCommentCnt(HttpServletRequest request, @PathVariable(required = false) String id) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
@@ -58,6 +58,13 @@ public class CommentLikeController {
             user.setId(Integer.parseInt(id));
         }
         int response = commentlikeService.findCommentLikeCnt(user.getId());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //댓글 별 좋아요 수 구하기
+    @GetMapping(path = {"/comment/user/count/{commentId}", "/comment/user/count"})
+    public ResponseEntity<Integer> likeCommentUserCnt(@PathVariable(required = false) int commentId) {
+        int response = commentlikeService.findCommentLikeUserCount(commentId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -45,7 +45,7 @@ public class BookLikeController {
     }
 
     // 내가 좋아요한 시집 보기
-    @GetMapping(path = {"/book", "/book-like/book/{id}"})
+    @GetMapping(path = {"/book", "/book/{id}"})
     public ResponseEntity<List<HashMap<?, ?>>> likeBookList(HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");

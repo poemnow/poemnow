@@ -12,11 +12,11 @@ import java.util.List;
 @Mapper
 public interface FollowMapper {
 
-	int insertFollow(Follow followRequest);
+	int insertFollow(int userId , int followId);
 
 	List<HashMap<String, String>> selectFollow(int userId);
 
-	int deleteFollow( Follow follow );
+	int deleteFollow( int userId , int followId);
 
 	List<HashMap<String, String>> selectFollower(int userId);
 
@@ -26,4 +26,7 @@ public interface FollowMapper {
 
 	User selectUserByIdentifierAndPassword(String userId, String password);
 
+	List<HashMap<String, String>> selectYourFollowSame(int id , int userId);
+
+	List<HashMap<String, String>> selectYourFollowDif(int id, int userId);
 }
