@@ -35,4 +35,9 @@ public class CommentLikeServiceImpl implements CommentLikeService {
         return commentLikeMapper.selectCommentLikeCnt(commentId);
     }
 
+    @Override
+    public int findCommentLikeUserCount(int commentId) {
+        return commentLikeMapper.selectCommentLikeUserCnt(commentId);
+    }
+
 }

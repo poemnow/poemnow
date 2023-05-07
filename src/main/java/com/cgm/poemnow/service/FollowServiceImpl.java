@@ -20,17 +20,17 @@ public class FollowServiceImpl implements FollowService {
 	private FollowMapper followMapper;
 
 	@Override
-	public int addFollow(Follow followRequest) {
-		return followMapper.insertFollow(followRequest);
+	public int addFollow(int userId , int followId) {
+		return followMapper.insertFollow(userId, followId);
 	}
 
 	@Override
-	public List<HashMap<String, String>> findFollow(int userId) { return followMapper.selectFollow(userId);
+	public List<HashMap<String, String>> findMyFollow(int userId) { return followMapper.selectFollow(userId);
 	}
 
 	@Override
-	public int removeFollow( Follow follow ) {
-		return followMapper.deleteFollow(follow);
+	public int removeFollow( int userId , int followId) {
+		return followMapper.deleteFollow(userId, followId);
 	}
 
 	@Override
@@ -57,6 +57,16 @@ public class FollowServiceImpl implements FollowService {
 		HttpSession session = request.getSession();
 		session.setAttribute("loginUser",loginUser);
 		return true;
+	}
+
+	@Override
+	public List<HashMap<String, String>> findYourFollowSame(int id , int userId) {
+		return followMapper.selectYourFollowSame(id , userId);
+	}
+
+	@Override
+	public List<HashMap<String, String>> findYourFollowDif(int id, int userId) {
+		return followMapper.selectYourFollowDif(id , userId);
 	}
 
 }

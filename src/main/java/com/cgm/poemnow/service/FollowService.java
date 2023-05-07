@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface FollowService {
 
-	int addFollow(Follow followRequest);
+	int addFollow(int userId , int followId);
 
-	List<HashMap<String, String>> findFollow(int userId);
+	List<HashMap<String, String>> findMyFollow(int userId);
 
-	int removeFollow( Follow follow );
+	int removeFollow( int userId , int followId);
 
 	List<HashMap<String, String>> findFollower(int userId);
 
@@ -23,4 +23,7 @@ public interface FollowService {
 
 	boolean loginUser(User user, HttpServletRequest request);
 
+	List<HashMap<String, String>> findYourFollowSame(int id , int userId);
+
+	List<HashMap<String, String>> findYourFollowDif(int id, int userId);
 }
