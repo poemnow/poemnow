@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.PoemMapper" >
+    <resultMap id="poemMapper" type="com.cgm.poemnow.domain.Poem">
+        <result column="id" property="id"/>
+        <result column="title" property="title" />
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="created_at" property="createAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="published" property="published"/>
+        <result column="published_at" property="publishedAt"/>
+        <result column="like_cnt" property="likeCnt"/>
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="unknown" property="unknown"/>
+        <result column="font" property="font"/>
+    </resultMap>
 
     <insert id="insertPoem" parameterType="com.cgm.poemnow.domain.Poem">
         INSERT INTO poem
@@ -21,11 +35,18 @@
     </insert>
 
     <select id="selectAllPoems" resultType="com.cgm.poemnow.domain.Poem">
-        select * FROM poem
+        select id, title, content, user_id AS userId, DATE_FORMAT(created_At, '%Y-%m-%d %H:%i:%s') AS createdAt,
+               DATE_FORMAT(updated_At, '%Y-%m-%d %H:%i:%s') AS updatedAt, published,
+               DATE_FORMAT(published_At, '%Y-%m-%d %H:%i:%s') AS publishedAt,
+               like_Cnt, view_Cnt, unknown, font
+        FROM poem
     </select>
 
     <select id="selectPoemById" parameterType="int" resultType="com.cgm.poemnow.domain.Poem">
-        SELECT *
+        SELECT id, title, content, user_id AS userId, DATE_FORMAT(created_At, '%Y-%m-%d %H:%i:%s') AS createdAt,
+               DATE_FORMAT(updated_At, '%Y-%m-%d %H:%i:%s') AS updatedAt, published,
+               DATE_FORMAT(published_At, '%Y-%m-%d %H:%i:%s') AS publishedAt,
+               like_Cnt, view_Cnt, unknown, font
         FROM poem
         WHERE id = #{id}
     </select>
@@ -44,5 +65,43 @@
         FROM poem
         WHERE id = #{param1}
     </delete>
+
+    <select id="selectPoemsByBookId" parameterType="Integer" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT DISTINCT
+            bp.poem_order,
+            bp.poem_id id,
+            p.title,
+            p.content,
+            p.user_id AS userId,
+            DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') AS createdAt,
+            DATE_FORMAT(p.updated_at, '%Y-%m-%d %H:%i:%s') AS updatedAt,
+            p.published,
+            DATE_FORMAT(p.published_at, '%Y-%m-%d %H:%i:%s') AS publishedAt,
+            p.like_cnt,
+            p.view_cnt,
+            p.unknown
+        FROM book_poem bp, poem p
+        WHERE bp.book_id = #{id} and bp.poem_id = p.id
+        ORDER BY bp.poem_order ASC
+    </select>
+
+    <select id="selectPoemsByUserId" parameterType="Integer" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT DISTINCT
+            u.id,
+            p.title,
+            p.content,
+            p.user_id AS userId,
+            DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') AS createdAt,
+            DATE_FORMAT(p.updated_at, '%Y-%m-%d %H:%i:%s') AS updatedAt,
+            p.published,
+            DATE_FORMAT(p.published_at, '%Y-%m-%d %H:%i:%s') AS publishedAt,
+            p.like_cnt,
+            p.view_cnt,
+            p.unknown
+        FROM user u
+        right join poem p on u.id = p.user_id
+        WHERE u.id = #{id}
+        ORDER BY createdAt DESC
+    </select>
 
 </mapper>

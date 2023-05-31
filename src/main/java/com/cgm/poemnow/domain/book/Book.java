@@ -1,4 +1,4 @@
-package com.cgm.poemnow.domain;
+package com.cgm.poemnow.domain.book;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +15,12 @@ public class Book {
 
 	private int id;
 	private String title;
-	private String author;
+	private int userId;
 	private Timestamp createdAt;
 	private short published;
 	private Timestamp publishedAt;
 	private String outerColor;
 	private String innerColor;
+	private String bookDetail;
 
 }

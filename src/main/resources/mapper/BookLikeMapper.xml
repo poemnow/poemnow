@@ -3,7 +3,7 @@
 <mapper namespace="com.cgm.poemnow.mapper.BookLikeMapper" >
 
     <select id="selectBookLike" resultType="HashMap" parameterType="Integer">
-        SELECT  b.id, b.title, b.user_id , b.outer_color , b.inner_color ,b.published_at , b.book_detail, u.user_nickname,
+        SELECT  b.id, b.title, b.user_id , b.outer_color , b.inner_color ,b.created_at , b.book_detail, u.user_nickname,
                 (SELECT COUNT(*) FROM book_like
                  WHERE book_id = b.id) as like_cnt
         FROM book b
@@ -11,8 +11,8 @@
         WHERE b.user_id = #{userId};
     </select>
 
-    <insert id="insertBookLike" parameterType="com.cgm.poemnow.domain.Like.PoemLike">
-        INSERT INTO book_like(user_id, book_id)
+    <insert id="insertBookLike" parameterType="com.cgm.poemnow.domain.Like.BookLike">
+        INSERT INTO book_like (user_id, book_id)
         VALUES (#{userId} , #{bookId})
     </insert>
 

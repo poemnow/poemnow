@@ -17,6 +17,7 @@ public class BookLikeServiceImpl implements BookLikeService {
     private BookLikeMapper booklikeMapper;
     @Override
     public int addBookLike(BookLike likeRequest) {
+        System.out.println(likeRequest.toString());
         return booklikeMapper.insertBookLike(likeRequest);
     }
 

@@ -3,8 +3,9 @@ package com.cgm.poemnow.mapper;
 import java.util.List;
 import java.util.Map;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 import com.cgm.poemnow.domain.Poem;
+import com.cgm.poemnow.domain.book.BookLikeResponse;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -13,11 +14,11 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface BookMapper {
 
+	List<Book> selectAllBooks();
+
 	int insertBook(Book book);
 
 	int insertBookPoem(Map map);
-
-	List<Book> selectAllBooks();
 
 	List<Poem> selectPoemsByBookId(int id);
 
@@ -31,4 +32,9 @@ public interface BookMapper {
 
 	int deleteBookPoem(Book book);
 
+	List<Book> selectBooksByTitle(String keyword, String sortOrder);
+
+	List<Book> selectBooksByUserId(int id);
+
+	List<Book> selectBooksLiked(int userId);
 }

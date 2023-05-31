@@ -2,54 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.BookMapper" >
 
-    <resultMap id="bookMap" type="com.cgm.poemnow.domain.Book">
+    <resultMap id="bookMap" type="com.cgm.poemnow.domain.book.Book">
         <result column="id" property="id"/>
         <result column="title" property="title"/>
-        <result column="author" property="author"/>
+        <result column="user_id" property="userId"/>
         <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
         <result column="published" property="published"/>
         <result column="published_at" property="publishedAt"/>
         <result column="outer_color" property="outerColor"/>
         <result column="inner_color" property="innerColor"/>
+        <result column="book_detail" property="bookDetail"/>
     </resultMap>
 
-    <select id="selectPoemsByBookId" parameterType="INT" resultType="com.cgm.poemnow.domain.Poem">
-        SELECT DISTINCT
-            bp.poem_order,
-            bp.poem_id id,
-            p.title,
-            p.content,
-            p.author_id,
-            p.created_at,
-            p.updated_at,
-            p.published,
-            p.published_at,
-            p.like_cnt,
-            p.view_cnt,
-            p.unknown
-        FROM book_poem bp, poem p
-        WHERE bp.book_id = #{id} and bp.poem_id = p.id
-        ORDER BY bp.poem_order ASC
-    </select>
-
-    <select id="selectAllBooks" resultType="com.cgm.poemnow.domain.Book">
+    <select id="selectAllBooks" resultMap="bookMap">
         SELECT * from book
     </select>
 
-    <insert id="insertBook" parameterType="com.cgm.poemnow.domain.Book">
+    <insert id="insertBook" parameterType="com.cgm.poemnow.domain.book.Book">
         INSERT INTO book
             (
              title,
-             author,
+             user_id,
              outer_color,
-             inner_color
+             inner_color,
+             published,
+             book_detail
             )
         VALUES
             (
              #{title},
-             #{author},
+             #{userId},
              #{outerColor},
-             #{innerColor}
+             #{innerColor},
+             #{published},
+             #{bookDetail}
             )
     </insert>
 
@@ -66,6 +52,25 @@
             </foreach>
     </insert>
 
+    <select id="selectPoemsByBookId" parameterType="INT" resultType="com.cgm.poemnow.domain.Poem">
+        SELECT DISTINCT
+            bp.poem_order,
+            bp.poem_id id,
+            p.title,
+            p.content,
+            p.user_id,
+            p.created_at,
+            p.updated_at,
+            p.published,
+            p.published_at,
+            p.like_cnt,
+            p.view_cnt,
+            p.unknown
+        FROM book_poem bp, poem p
+        WHERE bp.book_id = #{id} and bp.poem_id = p.id
+        ORDER BY bp.poem_order ASC
+    </select>
+
     <select id="selectBookById" parameterType="int" resultMap="bookMap">
         SELECT *
         FROM book
@@ -77,9 +82,9 @@
         FROM book
     </select>
 
-    <update id="updateBook" parameterType="com.cgm.poemnow.domain.Book">
+    <update id="updateBook" parameterType="com.cgm.poemnow.domain.book.Book">
         UPDATE book
-        SET title = #{title}
+        SET title = #{title}, book_detail = #{bookDetail}, outer_color = #{outerColor}, inner_color = #{innerColor}
         WHERE id = #{id}
     </update>
 
@@ -89,10 +94,37 @@
         WHERE id = #{id}
     </delete>
 
-    <delete id="deleteBookPoem" parameterType="com.cgm.poemnow.domain.Book">
+    <delete id="deleteBookPoem" parameterType="com.cgm.poemnow.domain.book.Book">
         DELETE
         FROM book_poem
         WHERE book_id = #{id}
     </delete>
+
+    <select id="selectBooksByTitle" resultMap="bookMap">
+        SELECT * FROM book WHERE title LIKE concat('%' , #{keyword}, '%') ORDER BY
+        <choose>
+            <when test="sortOrder == 'like'">like_cnt DESC</when>
+            <otherwise>created_at DESC</otherwise>
+        </choose>
+    </select>
+
+    <select id="selectBooksByUserId" resultMap="bookMap">
+        SELECT * FROM book WHERE user_id = #{id}
+    </select>
+
+    <select id="selectBooksLiked" resultMap="bookMap">
+        SELECT DISTINCT
+            b.id id,
+            bl.user_id user_id,
+            b.title title,
+            b.outer_color outer_color,
+            b.inner_color inner_color,
+            bl.created_at created_at,
+            b.published published,
+            b.published_at published_at,
+            b.book_detail book_detail
+        FROM book b INNER JOIN book_like bl ON
+            bl.user_id = #{userId} and bl.book_id = b.id;
+    </select>
 
 </mapper>

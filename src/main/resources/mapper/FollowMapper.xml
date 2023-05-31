@@ -34,6 +34,28 @@
             );
     </select>
 
+    <select id="selectYourFollowerSame" resultMap="UserMap" parameterType="Integer">
+        SELECT F.follow_id, U.user_id, U.user_nickname, U.id, U.profile_pic, U.bio
+        FROM follow F
+                 INNER JOIN USER U ON F.user_id = U.ID
+        WHERE F.follow_id = #{id}
+          AND EXISTS (
+                SELECT 1 FROM follow F2
+                WHERE F2.follow_id = #{userId} AND F2.user_id = F.user_id
+            );
+    </select>
+
+    <select id="selectYourFollowerDif" resultMap="UserMap" parameterType="Integer">
+        SELECT F.follow_id, U.user_id, U.user_nickname, U.id, U.profile_pic, U.bio
+        FROM follow F
+                 INNER JOIN USER U ON F.user_id = U.ID
+        WHERE F.follow_id = #{id}
+          AND NOT EXISTS (
+                SELECT 1 FROM follow F2
+                WHERE F2.follow_id = #{userId} AND F2.user_id = F.user_id
+            );
+    </select>
+
     <select id="selectFollower" resultType="hashmap" parameterType="Integer">
         SELECT u.user_id , u.user_nickname FROM follow f
          INNER JOIN user u ON f.USER_ID = u.ID
