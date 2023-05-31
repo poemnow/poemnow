@@ -16,13 +16,12 @@ public class CommentServiceImpl implements CommentService{
 	private CommentMapper commentMapper;
 
 	@Override
-	public int addComment(Comment comment) {
-		return commentMapper.insertComment(comment);
-	}
-
-	@Override
 	public List<Comment> findAllComments() {
 		return commentMapper.selectAllComments();
+	}
+	@Override
+	public int addComment(Comment comment) {
+		return commentMapper.insertComment(comment);
 	}
 
 	@Override
@@ -31,8 +30,13 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public int removeComment(Comment comment) {
-		return commentMapper.deleteComment(comment);
+	public int removeComment(int commentId) {
+		return commentMapper.deleteComment(commentId);
+	}
+
+	@Override
+	public List<Comment> findCommentsByUserId(int userId) {
+		return commentMapper.selectCommentsByUserId(userId);
 	}
 
 	@Override

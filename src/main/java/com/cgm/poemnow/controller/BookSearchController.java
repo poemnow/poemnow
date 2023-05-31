@@ -1,6 +1,6 @@
 package com.cgm.poemnow.controller;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 
 import com.cgm.poemnow.service.BookSearchService;
 import org.springframework.beans.factory.annotation.Autowired;

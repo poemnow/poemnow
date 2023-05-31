@@ -1,6 +1,6 @@
 package com.cgm.poemnow.mapper;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

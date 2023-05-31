@@ -49,17 +49,6 @@ public class FollowServiceImpl implements FollowService {
 	}
 
 	@Override
-	public boolean loginUser(User user, HttpServletRequest request) {
-		User loginUser = followMapper.selectUserByIdentifierAndPassword(
-				user.getUserId(),
-				user.getPassword()
-		);
-		HttpSession session = request.getSession();
-		session.setAttribute("loginUser",loginUser);
-		return true;
-	}
-
-	@Override
 	public List<HashMap<String, String>> findYourFollowSame(int id , int userId) {
 		return followMapper.selectYourFollowSame(id , userId);
 	}
@@ -67,6 +56,16 @@ public class FollowServiceImpl implements FollowService {
 	@Override
 	public List<HashMap<String, String>> findYourFollowDif(int id, int userId) {
 		return followMapper.selectYourFollowDif(id , userId);
+	}
+
+	@Override
+	public List<HashMap<String, String>> findYourFollowerSame(int id, int userId) {
+		return followMapper.selectYourFollowerSame(id, userId);
+	}
+
+	@Override
+	public List<HashMap<String, String>> findYourFollowerDif(int id, int userId) {
+		return followMapper.selectYourFollowerDif(id, userId);
 	}
 
 }

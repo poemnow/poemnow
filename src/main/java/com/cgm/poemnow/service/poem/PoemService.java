@@ -15,4 +15,10 @@ public interface PoemService {
     int modifyPoem(Poem poem);
 
     int removePoem(int id);
+
+	List<Poem> findPoemsByBookId(int bookId);
+
+	List<Poem> findPoemsByUserId(int userId);
+
+	Poem findRandomPoem();
 }

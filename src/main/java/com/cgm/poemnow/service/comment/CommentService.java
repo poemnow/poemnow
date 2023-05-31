@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface CommentService {
 
-	int addComment(Comment comment);
-
 	List<Comment> findAllComments();
+
+	int addComment(Comment comment);
 
 	int modifyComment(Comment comment);
 
-	int removeComment(Comment comment);
+	int removeComment(int commentId);
+
+	List<Comment> findCommentsByUserId(int userId);
 
 	List<Comment> findCommentsOfThePoem(int poemId);
 

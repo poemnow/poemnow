@@ -12,10 +12,13 @@ public interface UserMapper {
 	int insertUser(User user);
 	User selectUserByIdentifierAndPassword(@Param("userId") String userId, @Param("password") String password);
 	User getLoggedInUser(String userId);
-	User selectUserById(String userId);
+	User selectUserByUserId(String userId);
+	User selectUserById(int id);
 	int updateUser(User user);
 	int deleteUser(String userId);
 	void updateLoggedIn (User user);
 	List<User> selectUsersByNickname(String keyword, String sortOrder);
+
+	int deleteUserReal(int id);
 
 }

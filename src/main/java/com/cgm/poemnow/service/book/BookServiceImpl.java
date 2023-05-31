@@ -1,14 +1,20 @@
 package com.cgm.poemnow.service.book;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 import com.cgm.poemnow.domain.BookPoem;
-import com.cgm.poemnow.domain.BookRequest;
+import com.cgm.poemnow.domain.book.BookLikeResponse;
+import com.cgm.poemnow.domain.book.BookRequest;
 import com.cgm.poemnow.domain.Poem;
+import com.cgm.poemnow.domain.book.BookResponse;
+import com.cgm.poemnow.mapper.BookLikeMapper;
 import com.cgm.poemnow.mapper.BookMapper;
+import com.cgm.poemnow.mapper.PoemMapper;
+import com.cgm.poemnow.mapper.UserMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +26,20 @@ public class BookServiceImpl implements BookService {
 
 	@Autowired
 	private BookMapper bookMapper;
+
+	@Autowired
+	private PoemMapper poemMapper;
+
+	@Autowired
+	private UserMapper userMapper;
+
+	@Autowired
+	private BookLikeMapper bookLikeMapper;
+
+	@Override
+	public List<Book> findAllBooks() {
+		return bookMapper.selectAllBooks();
+	}
 
 	@Override
 	public int addBook(BookRequest bookRequest) {
@@ -40,15 +60,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> findAllBooks() {
-		return bookMapper.selectAllBooks();
-	}
-
-	@Override
 	public List<Poem> findPoemsByBookId(int id) { return bookMapper.selectPoemsByBookId(id); }
-
-	@Override
-	public Book findBookById(int id) { return bookMapper.selectBookById(id); }
 
 	@Override
 	public int modifyBook(BookRequest bookRequest) {
@@ -71,6 +83,38 @@ public class BookServiceImpl implements BookService {
 		book.setId(id);
 		bookMapper.deleteBookPoem(book);
 		return bookMapper.deleteBook(id);
+	}
+
+	@Override
+	public BookResponse findBookById(int id) {
+		BookResponse bookResponse = new BookResponse();
+		bookResponse.setBook(bookMapper.selectBookById(id));
+		bookResponse.setPoemList(poemMapper.selectPoemsByBookId(id));
+		bookResponse.setUser(userMapper.selectUserById(bookResponse.getBook().getUserId()));
+		return bookResponse;
+	}
+
+	@Override
+	public List<Book> findBooksByTitle(String keyword, String sortOrder) {
+		return bookMapper.selectBooksByTitle(keyword, sortOrder);
+	}
+
+	@Override
+	public List<BookLikeResponse> findPoemsByUserId(int id) {
+		List<BookLikeResponse> bookLikeResponseList = new ArrayList<>();
+//		for (Book blr: bookMapper.selectBooksByUserId(id)) {
+//			int bookId = blr.getId();
+//
+//		}
+//		return bookMapper.selectBooksByUserId(id);
+		return bookLikeResponseList;
+	}
+
+	@Override
+	public List<BookLikeResponse> findBooksLiked(int userId) {
+		List<BookLikeResponse> bookLikeResponseList = new ArrayList<>();
+//		return bookMapper.selectBooksLiked(userId);
+		return bookLikeResponseList;
 	}
 
 }

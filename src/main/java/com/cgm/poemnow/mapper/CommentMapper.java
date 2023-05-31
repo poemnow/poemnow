@@ -16,10 +16,11 @@ public interface CommentMapper {
 
 	int updateComment(Comment comment);
 
-	int deleteComment(Comment comment);
-
-	List<Comment> selectCommentsOfThePoem(int poemId);
+	int deleteComment(int commentId);
 
 	int deleteCommentsByUserId(int userId);
 
+	List<Comment> selectCommentsOfThePoem(int poemId);
+
+	List<Comment> selectCommentsByUserId(int userId);
 }

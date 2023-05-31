@@ -2,7 +2,7 @@ package com.cgm.poemnow;
 
 import com.cgm.poemnow.controller.BookSearchController;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;

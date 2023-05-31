@@ -1,6 +1,6 @@
 package com.cgm.poemnow.service;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 import com.cgm.poemnow.mapper.BookSearchMapper;
 
 import java.util.List;

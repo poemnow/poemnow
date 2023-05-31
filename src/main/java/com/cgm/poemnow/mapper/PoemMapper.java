@@ -20,4 +20,7 @@ public interface PoemMapper {
 
 	int deletePoem(int id);
 
+	List<Poem> selectPoemsByBookId(int bookId);
+
+	List<Poem> selectPoemsByUserId(int userId);
 }

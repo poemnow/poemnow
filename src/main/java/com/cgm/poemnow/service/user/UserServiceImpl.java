@@ -57,13 +57,14 @@ public class UserServiceImpl implements  UserService {
 	}
 
 	@Override
-	public boolean loginUser(User user) {
-		// 계정이 이미 로그인 된 사용자인지 확인
-		User loggedInUser = userMapper.getLoggedInUser(user.getUserId());
-		// 만약 loggedInUser가 존재한다면, 이미 로그인 한 계정이므로 로그인 시켜선 안 된다.
-		if (loggedInUser != null) {
-			return false;
-		}
+	public boolean loginUser(User user, HttpSession session) {
+		httpSession = session;
+//		// 계정이 이미 로그인 된 사용자인지 확인
+//		User loggedInUser = userMapper.getLoggedInUser(user.getUserId());
+//		// 만약 loggedInUser가 존재한다면, 이미 로그인 한 계정이므로 로그인 시켜선 안 된다.
+//		if (loggedInUser != null) {
+//			return false;
+//		}
 
 		// 계정 아이디와 비밀번호의 길이를 확인
 		// 아이디가 [4, 20], 비밀번호가 [8, 20]이 아니라면 잘못된 입력이므로 false 반환
@@ -95,8 +96,10 @@ public class UserServiceImpl implements  UserService {
 //		// 생성된 쿠키를 HTTP 응답에 추가합니다.
 //		response.addCookie(userCookie);
 
-		// 로그인 가능하므로 로그인처리를 위해 true로 변경
-		loginUser.setLoggedIn(true);
+//		// 로그인 가능하므로 로그인처리를 위해 true로 변경
+//		loginUser.setLoggedIn(true);
+
+//		userMapper.updateLoggedIn(loginUser);
 
 		// 여러 계정의 로그인을 위해 세션에 사용자를 추가해서 저장
 		httpSession.setAttribute("loginUser", loginUser);
@@ -117,35 +120,45 @@ public class UserServiceImpl implements  UserService {
 
 	@Override
 	public boolean isUserLoggedIn(User user) {
-		String loginUserId = (String)httpSession.getAttribute("loginUser_" + user.getUserId());
-		return loginUserId != null;
+		User loginUser = (User)httpSession.getAttribute("loginUser");
+		return loginUser  != null;
 	}
 
 	@Override
-	public boolean logoutUser(User user) {
-		String loginUserId = (String) httpSession.getAttribute("loginUser");
-		// 로그인 하지 않은 사용자거나, 요청을 보낸 사람과 로그 아웃 대상이 다른 경우 명령을 실행하지 않는다.
-		if (loginUserId == null || loginUserId.equals(user.getUserId())) {
+	public boolean logoutUser(User user, HttpSession session) {
+		httpSession = session;
+		String loginUserId = ((User) httpSession.getAttribute("loginUser")).getUserId();
+		// 로그인 하지 않은 사용자거나, 요청을 보낸 사람과 로그 아웃 대상이 다른 경우 명령을 실행하지 않는다.\
+		if (loginUserId == null || !loginUserId.equals(user.getUserId())) {
 			return false;
 		}
-
 		httpSession.removeAttribute("loginUser");
+		userMapper.updateLoggedIn(user);
 		return true;
 	}
 
 	@Override
-	public User findUserById(String userId) {
+	public User findUserByUserId(String userId) {
 		// 계정이 이미 로그인 된 사용자인지 확인
 //		User loggedInUser = userMapper.getLoggedInUser(user.getUserId());
 //		// 만약 loggedInUser가 존재한다면, 이미 로그인 한 계정이므로 로그인 시켜선 안 된다.
 //		if (loggedInUser == null) {
 //			return null;
 //		}
-		User userFound = userMapper.selectUserById(userId);
+		User userFound = userMapper.selectUserByUserId(userId);
 		if (userFound == null) {
 			throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
 		}
 		return userFound;
+	}
+
+	@Override
+	public User findUserById(int id) {
+		User user = userMapper.selectUserById(id);
+		if( user == null ){
+			throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+		}
+		return user;
 	}
 
 	@Override
@@ -179,7 +192,7 @@ public class UserServiceImpl implements  UserService {
 
 	@Override
 	public boolean isValidId(String userId) {
-		return userMapper.selectUserById(userId) == null;
+		return userMapper.selectUserByUserId(userId) == null;
 	}
 
 	@Override
@@ -213,6 +226,11 @@ public class UserServiceImpl implements  UserService {
 	@Override
 	public List<User> findUsersByNickname(String keyword, String sortOrder) {
 		return userMapper.selectUsersByNickname(keyword, sortOrder);
+	}
+
+	@Override
+	public int removeUserByDelete(int id) {
+		return userMapper.deleteUserReal(id);
 	}
 
 }

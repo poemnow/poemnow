@@ -51,7 +51,7 @@
         WHERE user_id = #{userId}
     </update>
 
-    <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultType="com.cgm.poemnow.domain.User">
+    <select id="selectUserByIdentifierAndPassword" parameterType="java.util.Map" resultMap="userMap">
         SELECT *
         FROM user
         WHERE user_id = #{userId}
@@ -62,13 +62,18 @@
         SELECT *
         FROM user
         WHERE user_id = #{userId}
-        AND is_logged_in = TRUE
     </select>
 
-    <select id="selectUserById" parameterType="String" resultMap="userMap">
+    <select id="selectUserByUserId" parameterType="String" resultMap="userMap">
         SELECT *
         FROM user
         WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectUserById" parameterType="int" resultMap="userMap">
+        SELECT *
+        FROM user
+        WHERE id = #{id}
     </select>
 
     <!-- todo: 업데이트 할 때 이메일과 비밀번호를 변경하는 기능도 추가-->
@@ -84,12 +89,16 @@
         WHERE user_id = #{userId}
     </update>
 
-    <select id="selectUsersByNickname" resultType="com.cgm.poemnow.domain.User">
+    <select id="selectUsersByNickname" resultMap="userMap">
         SELECT * FROM user WHERE user_nickname LIKE concat('%' , #{keyword}, '%') ORDER BY
         <choose>
             <when test="sortOrder == 'follower_cnt'"> follower_cnt DESC</when>
             <otherwise>created_at DESC</otherwise>
         </choose>
     </select>
+
+    <delete id="deleteUserReal" parameterType="Integer">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
 
 </mapper>

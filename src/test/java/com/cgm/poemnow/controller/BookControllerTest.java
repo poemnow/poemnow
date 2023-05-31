@@ -3,9 +3,9 @@ package com.cgm.poemnow.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cgm.poemnow.domain.Book;
+import com.cgm.poemnow.domain.book.Book;
 import com.cgm.poemnow.domain.BookPoem;
-import com.cgm.poemnow.domain.BookRequest;
+import com.cgm.poemnow.domain.book.BookRequest;
 import com.cgm.poemnow.domain.Poem;
 import com.cgm.poemnow.service.book.BookService;
 import com.google.gson.Gson;
@@ -53,7 +53,7 @@ class BookControllerTest {
 		// given
 		Book newbook = Book.builder()
 				.title("안녕하세요! 적당히 바람이 시원해 기분이 너무 좋아요! 유후!")
-				.author("박미정")
+				.userId("박미정")
 				.build();
 
 		BookPoem newBookPoem1 = BookPoem.builder()
