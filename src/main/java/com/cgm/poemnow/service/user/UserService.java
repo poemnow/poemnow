@@ -2,10 +2,9 @@ package com.cgm.poemnow.service.user;
 
 import com.cgm.poemnow.domain.User;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 public interface UserService {
 
@@ -29,5 +28,7 @@ public interface UserService {
 	List<User> findUsersByNickname(String keyword, String sortOrder);
 
 	int removeUserByDelete(int id);
+
+	User findUserByEmail(String email);
 
 }
