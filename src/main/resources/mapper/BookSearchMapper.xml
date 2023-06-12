@@ -2,8 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.BookSearchMapper" >
 
-    <select id="selectBooksByTitle" resultType="com.cgm.poemnow.domain.Book">
-        SELECT * FROM book WHERE title LIKE concat('%' , #{keyword}, '%') ORDER BY
+    <select id="selectBooksByTitle" resultType="hashmap" >
+        SELECT  b.id, b.title, b.user_id , b.outer_color , b.inner_color ,DATE_FORMAT(b.created_at , '%Y-%m-%d') as created_at, b.book_detail, u.user_nickname,
+        (SELECT COUNT(*) FROM book_like
+        WHERE book_id = b.id) as like_cnt
+        FROM book b
+        INNER JOIN user u ON b.user_id = u.id
+        WHERE b.title LIKE concat('%' , '나', '%') ORDER BY
         <choose>
             <when test="sortOrder == 'like'">like_cnt DESC</when>
             <otherwise>created_at DESC</otherwise>

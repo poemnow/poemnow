@@ -20,8 +20,8 @@ public class PoemLikeController {
     @Autowired
     private PoemLikeService poemLikeService;
 
-    //  Like!!
-    @PostMapping(path = "/poem-like")
+    //  좋아요 추가
+    @PostMapping(path = "/")
     public ResponseEntity<?> poemLikeAdd(@RequestBody PoemLike poemLikeRequest, HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
@@ -32,7 +32,7 @@ public class PoemLikeController {
     }
 
     // Unlike!!
-    @DeleteMapping(path = "/poem-like/{poemId}")
+    @DeleteMapping(path = "/{poemId}")
     public ResponseEntity<?> poemLikeRemove(HttpServletRequest request, @PathVariable String poemId){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");  // 세션에서 받아 옴
@@ -42,7 +42,7 @@ public class PoemLikeController {
     }
 
     // 내가 좋아요한 시 보기
-    @GetMapping(path = {"/poem-like/poem/{id}", "/poem-like/poem"})
+    @GetMapping(path = {"/poem/{id}", "/poem"})
     public ResponseEntity<List<HashMap<?, ?>>> likePoemList(HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser"); // 세션에서 받아 옴
@@ -51,14 +51,14 @@ public class PoemLikeController {
     }
 
     // 시 별 좋아요 수 구하기
-    @GetMapping(path = {"/poem-like/poem/count/{poemId}", "/poem-like/poem/count"})
+    @GetMapping(path = {"/poem/count/{poemId}", "/poem/count"})
     public ResponseEntity<Integer> likePoemPoemCount(@PathVariable(required = false) int poemId) {
         int response = poemLikeService.findPoemLikePoemCount(poemId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 내가 좋아요한 시 수 구하기
-    @GetMapping(path = {"/poem-like/user/count/{id}", "/poem-like/user/count"})
+    @GetMapping(path = {"/user/count/{id}", "/user/count"})
     public ResponseEntity<Integer> likePoemUserCnt(HttpServletRequest request, @PathVariable(required = false) String id) {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");

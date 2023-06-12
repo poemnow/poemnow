@@ -3,6 +3,7 @@ package com.cgm.poemnow.service;
 import com.cgm.poemnow.domain.Book;
 import com.cgm.poemnow.mapper.BookSearchMapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class BookSearchServiceImpl implements BookSearchService {
     private BookSearchMapper bookSearchMapper;
 
     @Override
-    public List<Book> findBooksByTitle(String keyword, String sortOrder) {
+    public List<HashMap<String, ?>>  findBooksByTitle(String keyword, String sortOrder) {
         return bookSearchMapper.selectBooksByTitle(keyword, sortOrder);
     }
 

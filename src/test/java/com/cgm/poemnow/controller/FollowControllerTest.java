@@ -1,7 +1,6 @@
 package com.cgm.poemnow.controller;
 
 import com.cgm.poemnow.domain.Follow;
-import com.cgm.poemnow.service.FollowService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
