@@ -15,4 +15,5 @@ public interface PoemSearchService {
 
     List<Poem> findPoemsByTag(String keyword, String sortOrder);
 
+    int findCommentCntByPoemId(int poemId);
 }

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cgm.poemnow.mapper.PoemSearchMapper" >
+    <resultMap id="poemMapper" type="com.cgm.poemnow.domain.Poem">
+        <result column="id" property="id"/>
+        <result column="title" property="title" />
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="published" property="published"/>
+        <result column="published_at" property="publishedAt"/>
+        <result column="like_cnt" property="likeCnt"/>
+        <result column="view_cnt" property="viewCnt"/>
+        <result column="unknown" property="unknown"/>
+        <result column="font" property="font"/>
+    </resultMap>
 
-    <select id="selectPoemsByTitle" resultType="com.cgm.poemnow.domain.Poem">
+    <select id="selectPoemsByTitle" resultMap="poemMapper">
         SELECT * FROM poem WHERE title LIKE concat('%' , #{keyword}, '%') ORDER BY
         <choose>
             <when test="sortOrder == 'like'">like_cnt DESC</when>
@@ -10,7 +24,7 @@
         </choose>
     </select>
 
-    <select id="selectPoemsByContent" resultType="com.cgm.poemnow.domain.Poem">
+    <select id="selectPoemsByContent" resultMap="poemMapper">
         SELECT * FROM poem WHERE content LIKE concat('%' , #{keyword}, '%') ORDER BY
         <choose>
             <when test="sortOrder == 'like'">like_cnt DESC</when>
@@ -18,7 +32,7 @@
         </choose>
     </select>
 
-    <select id="selectPoemsByTitleAndContent" resultType="com.cgm.poemnow.domain.Poem">
+    <select id="selectPoemsByTitleAndContent" resultMap="poemMapper">
         SELECT * FROM poem WHERE title LIKE concat('%' , #{keyword}, '%') OR content LIKE concat('%' , #{keyword}, '%') ORDER BY
         (CASE WHEN title LIKE concat('%' , #{keyword}, '%') AND content LIKE concat('%' , #{keyword}, '%') THEN 0 ELSE 1 END),
         <choose>
@@ -27,7 +41,7 @@
         </choose>
     </select>
 
-    <select id="selectPoemsByAuthor" resultType="com.cgm.poemnow.domain.Poem">
+    <select id="selectPoemsByAuthor" resultMap="poemMapper">
         SELECT poem.* FROM poem JOIN user on poem.author_id = user.id WHERE user.user_nickname LIKE concat('%' , #{keyword}, '%') ORDER BY
         <choose>
             <when test="sortOrder == 'like'">like_cnt DESC</when>
@@ -41,6 +55,12 @@
             <when test="sortOrder == 'like'">like_cnt DESC</when>
             <otherwise>created_at DESC</otherwise>
         </choose>
+    </select>
+
+    <select id="selectCommentCntByPoemId" parameterType="Integer" resultType="Integer">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE poem_id = #{poemId}
     </select>
 
 </mapper>

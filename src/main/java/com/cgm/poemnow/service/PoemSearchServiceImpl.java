@@ -39,4 +39,9 @@ public class PoemSearchServiceImpl implements PoemSearchService {
         return poemSearchMapper.selectPoemsByTag(keyword, sortOrder);
     }
 
+    @Override
+    public int findCommentCntByPoemId(int poemId) {
+        return poemSearchMapper.selectCommentCntByPoemId(poemId);
+    }
+
 }
