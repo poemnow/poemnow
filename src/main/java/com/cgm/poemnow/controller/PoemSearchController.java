@@ -30,7 +30,9 @@ public class PoemSearchController {
     public ResponseEntity<?> poemSearchByTitle(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "sortOrder", required = false, defaultValue = "lastest") String sortOrder
-    ){
+    ) throws UnsupportedEncodingException {
+
+        keyword = URLDecoder.decode(keyword, "UTF-8");
         List<Poem> response = PoemSearchService.findPoemsByTitle(keyword, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -39,7 +41,9 @@ public class PoemSearchController {
     public ResponseEntity<?> poemSearchByContent(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "sortOrder", required = false, defaultValue = "lastest") String sortOrder
-    ){
+    ) throws UnsupportedEncodingException {
+
+        keyword = URLDecoder.decode(keyword, "UTF-8");
         List<Poem> response = PoemSearchService.findPoemsByContent(keyword, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -74,7 +78,8 @@ public class PoemSearchController {
     public ResponseEntity<?> poemSearchByAuthor(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "sortOrder", required = false, defaultValue = "lastest") String sortOrder
-    ){
+    ) throws UnsupportedEncodingException {
+        keyword = URLDecoder.decode(keyword, "UTF-8");
         List<Poem> response = PoemSearchService.findPoemsByAuthor(keyword, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -83,7 +88,9 @@ public class PoemSearchController {
     public ResponseEntity<?> poemSearchByTag(
             @RequestParam(value = "keyword") String keyword,
             @RequestParam(value = "sortOrder", required = false, defaultValue = "lastest") String sortOrder
-    ){
+    ) throws UnsupportedEncodingException {
+
+        keyword = URLDecoder.decode(keyword, "UTF-8");
         List<Poem> response = PoemSearchService.findPoemsByTag(keyword, sortOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
