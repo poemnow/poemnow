@@ -20,4 +20,5 @@ public interface  PoemSearchMapper {
 
     List<Poem> selectPoemsByTag(String keyword, String sortOrder);
 
+	int selectCommentCntByPoemId(int poemId);
 }
