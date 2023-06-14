@@ -3,9 +3,10 @@
 <mapper namespace="com.cgm.poemnow.mapper.PoemLikeMapper" >
 
     <select id="selectPoemLike" resultType="HashMap" parameterType="Integer">
-            SELECT u.user_id userId, l.poem_id poemId FROM poem_like l
-            INNER JOIN user u ON l.user_id = u.id
-            WHERE l.user_id = #{userId}
+        SELECT u.id, u.user_nickname, l.poem_id AS poemId, p.title FROM poem_like l
+                INNER JOIN user u ON l.user_id = u.id
+                INNER JOIN poem p ON p.id = l.poem_id
+        WHERE l.user_id = #{userId}
     </select>
 
     <insert id="insertPoemLike" parameterType="com.cgm.poemnow.domain.Like.PoemLike">
