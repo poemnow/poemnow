@@ -20,4 +20,5 @@ public interface CommentService {
 
 	int removeCommentsByUserId(int userId);
 
+	int findCommentCount(int poemId);
 }

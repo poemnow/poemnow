@@ -23,4 +23,6 @@ public interface CommentMapper {
 	List<Comment> selectCommentsOfThePoem(int poemId);
 
 	List<Comment> selectCommentsByUserId(int userId);
+
+	int selectCommentCountByPoem(int poemId);
 }

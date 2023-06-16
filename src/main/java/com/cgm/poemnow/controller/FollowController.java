@@ -24,42 +24,52 @@ public class FollowController {
 	//팔로우 등록하기!
 	@PostMapping(path = {"/", ""}) // postman test 완
 	public ResponseEntity<?> followAdd(@RequestParam int followId,HttpServletRequest request){
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
-//		int userId =1;
+//		HttpSession session = request.getSession();
+//		User user = (User) session.getAttribute("loginUser");
+		int userId =1;
 
-		int response = followService.addFollow(user.getId(), followId);
+		int response = followService.addFollow(1, followId);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	//팔로우 취소
 	@DeleteMapping(path = {"/", ""}) // postman test 완
 	public ResponseEntity<?> followRemove(@RequestParam(value="followId") int followId,HttpServletRequest request){
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
-//		int userId =1;
-		int response = followService.removeFollow(user.getId(), followId);
+//		HttpSession session = request.getSession();
+//		User user = (User) session.getAttribute("loginUser");
+		int userId =1;
+		int response = followService.removeFollow(1, followId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	//나를 팔로워하는 사람 삭제
+	@DeleteMapping(path = {"follower"}) // postman test 완
+	public ResponseEntity<?> followerRemove(@RequestParam(value="followId") int followId,HttpServletRequest request){
+//		HttpSession session = request.getSession();
+//		User user = (User) session.getAttribute("loginUser");
+		int userId =1;
+		int response = followService.removeFollower(1, followId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	//내가 팔로우한 사람 보기 - pathVariable 있으면 특정 사람이 팔로우한 사람 보기
 	@GetMapping(path = {"/follow/{id}","/follow"})
 	public ResponseEntity<?> followList(HttpServletRequest request,@PathVariable(required = false) String id) {
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("loginUser");
+//		HttpSession session = request.getSession();
+//		User user = (User) session.getAttribute("loginUser");
 
 		if(id != null){
 			HashMap<String,List<HashMap<String, String>>> mp = new HashMap<>();
 			List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
-			response = followService.findYourFollowSame(Integer.parseInt(id), user.getId());
+			response = followService.findYourFollowSame(Integer.parseInt(id), 1);
 			mp.put("same" , response);
-			response = followService.findYourFollowDif(Integer.parseInt(id), user.getId());
+			response = followService.findYourFollowDif(Integer.parseInt(id), 1);
 			mp.put("dif" , response);
 			return new ResponseEntity<>(mp, HttpStatus.OK);
 		}else{
 			List<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
 
-			response = followService.findMyFollow(user.getId());
+			response = followService.findMyFollow(1);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 
@@ -73,22 +83,22 @@ public class FollowController {
 		User user = (User) session.getAttribute("loginUser");
 		if(id != null){
 			HashMap<String, List<HashMap<String, String>>> mp = new HashMap<>();
-			List<HashMap<String, String>> response = followService.findYourFollowerSame(Integer.parseInt(id), user.getId());
+			List<HashMap<String, String>> response = followService.findYourFollowerSame(Integer.parseInt(id), 1);
 			mp.put("same", response);
-			response = followService.findYourFollowerDif(Integer.parseInt(id), user.getId());
+			response = followService.findYourFollowerDif(Integer.parseInt(id), 1);
 			mp.put("dif", response);
 			return new ResponseEntity<>(mp, HttpStatus.OK);
 		}
-		List<HashMap<String, String>> response = followService.findFollower(user.getId());
+		List<HashMap<String, String>> response = followService.findFollower(1);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	//내 팔로우 수 구하기 - pathVariable 있으면 특정 사람의 팔로우 수 구하기
 	@GetMapping(path = {"/followCnt/{id}","followCnt"})
 	public ResponseEntity<Integer> followCnt(HttpServletRequest request,@PathVariable(required = false) String id) {
-		HttpSession session = request.getSession();
-		int userId = (int) session.getAttribute("userId");
-//		int userId = 1;
+//		HttpSession session = request.getSession();
+//		int userId = (int) session.getAttribute("userId");
+		int userId = 1;
 		if(id != null){
 			userId = Integer.parseInt(id);
 		}
@@ -99,8 +109,9 @@ public class FollowController {
 	//내 팔로워 수 구하기
 	@GetMapping(path = {"/followerCnt/{id}","followerCnt"})
 	public ResponseEntity<Integer> followerCnt(HttpServletRequest request,@PathVariable(required = false) String id) {
-		HttpSession session = request.getSession();
-		int userId = (int) session.getAttribute("userId");
+//		HttpSession session = request.getSession();
+//		int userId = (int) session.getAttribute("userId");
+		int userId = 1;
 		if(id != null){
 			userId = Integer.parseInt(id);
 		}

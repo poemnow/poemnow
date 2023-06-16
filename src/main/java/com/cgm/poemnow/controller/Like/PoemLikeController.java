@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/poem-like")
+@CrossOrigin("*")
 public class PoemLikeController {
     @Autowired
     private PoemLikeService poemLikeService;
@@ -23,9 +24,9 @@ public class PoemLikeController {
     //  Like!!
     @PostMapping(path = "/poem-like")
     public ResponseEntity<?> poemLikeAdd(@RequestBody PoemLike poemLikeRequest, HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("loginUser");
-        poemLikeRequest.setUserId(user.getId());
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("loginUser");
+        poemLikeRequest.setUserId(1);
         int response = poemLikeService.addPoemLike(poemLikeRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED); // 새로운 레코드 만들어야 돼서
 
@@ -34,9 +35,9 @@ public class PoemLikeController {
     // Unlike!!
     @DeleteMapping(path = "/poem-like/{poemId}")
     public ResponseEntity<?> poemLikeRemove(HttpServletRequest request, @PathVariable String poemId){
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("loginUser");  // 세션에서 받아 옴
-        int response = poemLikeService.removePoemLike(user.getId(), Integer.parseInt(poemId));
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("loginUser");  // 세션에서 받아 옴
+        int response = poemLikeService.removePoemLike(1, Integer.parseInt(poemId));
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
@@ -44,9 +45,9 @@ public class PoemLikeController {
     // 내가 좋아요한 시 보기
     @GetMapping(path = {"/poem-like/poem/{id}", "/poem-like/poem"})
     public ResponseEntity<List<HashMap<?, ?>>> likePoemList(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("loginUser"); // 세션에서 받아 옴
-        List<HashMap<?, ?>> response = poemLikeService.findPoemLike(user.getId());
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("loginUser"); // 세션에서 받아 옴
+        List<HashMap<?, ?>> response = poemLikeService.findPoemLike(1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

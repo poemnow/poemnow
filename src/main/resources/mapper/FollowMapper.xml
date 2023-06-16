@@ -41,8 +41,9 @@
         WHERE F.follow_id = #{id}
           AND EXISTS (
                 SELECT 1 FROM follow F2
-                WHERE F2.follow_id = #{userId} AND F2.user_id = F.user_id
+                WHERE F2.user_id = #{userId} AND F2.follow_id = F.user_id
             );
+
     </select>
 
     <select id="selectYourFollowerDif" resultMap="UserMap" parameterType="Integer">
@@ -52,12 +53,12 @@
         WHERE F.follow_id = #{id}
           AND NOT EXISTS (
                 SELECT 1 FROM follow F2
-                WHERE F2.follow_id = #{userId} AND F2.user_id = F.user_id
+                WHERE F2.user_id = #{userId} AND F2.follow_id = F.user_id
             );
     </select>
 
     <select id="selectFollower" resultType="hashmap" parameterType="Integer">
-        SELECT u.user_id , u.user_nickname FROM follow f
+        SELECT u.user_id , u.user_nickname ,u.id , u.profile_pic , u.bio FROM follow f
          INNER JOIN user u ON f.USER_ID = u.ID
         WHERE f.follow_id = #{userId};
     </select>
@@ -70,6 +71,11 @@
     <delete id="deleteFollow" parameterType="com.cgm.poemnow.domain.Follow">
         DELETE FROM follow
         WHERE user_id = #{userId} AND follow_id = #{followId};
+    </delete>
+
+    <delete id="deleteFollower" parameterType="com.cgm.poemnow.domain.Follow">
+        DELETE FROM follow
+        WHERE user_id = #{followId} AND follow_id=#{userId};
     </delete>
 
     <select id="selectFollowCnt" resultType="Integer" parameterType="Integer">

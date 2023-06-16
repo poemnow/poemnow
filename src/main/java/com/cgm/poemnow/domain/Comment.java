@@ -19,5 +19,7 @@ public class Comment {
 	private String createdAt;
 	private String updatedAt;
 	private boolean deleted;
+	private String profile_pic;
+	private String user_nickname;
 
 }
