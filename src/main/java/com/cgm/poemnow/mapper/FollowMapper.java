@@ -33,4 +33,6 @@ public interface FollowMapper {
 	List<HashMap<String, String>> selectYourFollowerSame(int id, int userId);
 
 	List<HashMap<String, String>> selectYourFollowerDif(int id, int userId);
+
+	int deleteFollower(int userId, int followId);
 }

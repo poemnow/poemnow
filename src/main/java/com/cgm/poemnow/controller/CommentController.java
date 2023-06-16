@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/comment")
+@CrossOrigin("*")
 public class CommentController {
 
 	@Autowired
@@ -59,7 +60,7 @@ public class CommentController {
 	}
 
 	// 댓글 삭제처리
-	@PatchMapping("/deleted/{commentId}") // postman test 완!
+	@DeleteMapping("/deleted/{commentId}") // postman test 완!
 	public ResponseEntity<?> commentRemove(@PathVariable String commentId) {
 		int response = commentService.removeComment(Integer.parseInt(commentId));
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -77,6 +78,13 @@ public class CommentController {
 	public ResponseEntity<List<Comment>> myCommentListByPoemId(@PathVariable(value="poemId") int poemId){
 		List<Comment> response = commentService.findCommentsOfThePoem(poemId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	// 시별 댓글 개수
+	@GetMapping("/poem/count/{poemId}") // postman test 완!
+	public ResponseEntity<Integer> myCommentCountByPoemId(@PathVariable(value="poemId") int poemId){
+		int response = commentService.findCommentCount(poemId);
+		return new ResponseEntity<Integer>(response, HttpStatus.OK);
 	}
 
 	// 탈퇴 시 댓글 비공개 처리를 위한 유저 당 댓글 전체 삭제 처리

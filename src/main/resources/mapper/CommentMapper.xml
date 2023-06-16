@@ -10,6 +10,8 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <result column="deleted" property="deleted"/>
+        <result column="profile_pic" property="profile_pic"/>
+        <result column="user_nickname" property="user_nickname"/>
     </resultMap>
 
     <insert id="insertComment" parameterType="com.cgm.poemnow.domain.Comment">
@@ -57,8 +59,9 @@
     <select id="selectCommentsOfThePoem" parameterType = "int" resultMap="commentMap">
         SELECT *
         FROM comment c
-        LEFT JOIN poem p ON c.poem_id = p.id
-        WHERE c.deleted = false AND c.poem_id = #{poemId} AND p.id IS NOT NULL
+                 LEFT JOIN poem p ON c.poem_id = p.id
+                 INNER JOIN user u on u.id = c.user_id
+        WHERE c.deleted = false AND c.poem_id = 1 AND p.id IS NOT NULL
     </select>
 
     <select id="selectCommentsByUserId" parameterType = "int" resultMap="commentMap">
@@ -67,5 +70,14 @@
         LEFT JOIN user u ON c.user_id = u.id
         WHERE c.deleted = false AND c.user_id = #{userId} AND u.id IS NOT NULL
     </select>
+
+    <select id="selectCommentCountByPoem" parameterType = "int" resultType="int" >
+        SELECT COUNT(*) FROM comment
+        WHERE poem_id = #{poemId}
+          AND deleted = 0;
+
+    </select>
+
+
 
 </mapper>

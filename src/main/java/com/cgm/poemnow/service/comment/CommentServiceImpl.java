@@ -48,4 +48,9 @@ public class CommentServiceImpl implements CommentService{
 		return commentMapper.deleteCommentsByUserId(userId);
 	}
 
+	@Override
+	public int findCommentCount(int poemId) {
+		return commentMapper.selectCommentCountByPoem(poemId);
+	}
+
 }

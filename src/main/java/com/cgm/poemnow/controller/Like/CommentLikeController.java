@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/comment-like")
+@CrossOrigin("*")
 public class CommentLikeController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class CommentLikeController {
     public ResponseEntity<?> CommentLikeAdd(@RequestBody CommentLike likeRequest, HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
-        likeRequest.setUserId(user.getId());
+        likeRequest.setUserId(1);
         int response = commentlikeService.addCommentLike(likeRequest);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -35,16 +36,16 @@ public class CommentLikeController {
     public ResponseEntity<?> poemLikeRemove(@PathVariable String commentId, HttpServletRequest request){
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("loginUser");
-        int response = commentlikeService.removeCommentLike(user.getId(), Integer.parseInt(commentId));
+        int response = commentlikeService.removeCommentLike(1, Integer.parseInt(commentId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 내가 좋아요한 댓글 보기
     @GetMapping(path = {"/comment", "/comment/{id}"})
     public ResponseEntity<List<HashMap<?, ?>>> likeCommentList(HttpServletRequest request){
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("loginUser");
-        List<HashMap<?, ?>> response = commentlikeService.findCommentLike(user.getId());
+//        HttpSession session = request.getSession();
+//        User user = (User) session.getAttribute("loginUser");
+        List<HashMap<?, ?>> response = commentlikeService.findCommentLike(1);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -23,5 +23,6 @@ public class Poem {
 	private int viewCnt;
 	private boolean unknown;
 	private String font;
+	private String profile_pic;
 
 }

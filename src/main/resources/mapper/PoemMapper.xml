@@ -12,6 +12,7 @@
         <result column="published_at" property="publishedAt"/>
         <result column="like_cnt" property="likeCnt"/>
         <result column="view_cnt" property="viewCnt"/>
+        <result column="profile_pic" property="profile_pic"/>
         <result column="unknown" property="unknown"/>
         <result column="font" property="font"/>
     </resultMap>
@@ -43,12 +44,14 @@
     </select>
 
     <select id="selectPoemById" parameterType="int" resultType="com.cgm.poemnow.domain.Poem">
-        SELECT id, title, content, user_id AS userId, DATE_FORMAT(created_At, '%Y-%m-%d %H:%i:%s') AS createdAt,
-               DATE_FORMAT(updated_At, '%Y-%m-%d %H:%i:%s') AS updatedAt, published,
-               DATE_FORMAT(published_At, '%Y-%m-%d %H:%i:%s') AS publishedAt,
-               like_Cnt, view_Cnt, unknown, font
-        FROM poem
-        WHERE id = #{id}
+        SELECT p.id, title, content, p.user_id AS userId, DATE_FORMAT(p.created_At, '%Y-%m-%d %H:%i:%s') AS createdAt,
+               DATE_FORMAT(p.updated_At, '%Y-%m-%d %H:%i:%s') AS updatedAt, published,
+               DATE_FORMAT(p.published_At, '%Y-%m-%d') AS publishedAt,
+               like_Cnt, view_Cnt, unknown, font, u.profile_pic
+        FROM poem p
+                 inner join user u on u.id = p.user_id
+        WHERE p.id =#{id}
+          AND published = true;
     </select>
 
     <update id="updatePoem" parameterType="com.cgm.poemnow.domain.Poem">

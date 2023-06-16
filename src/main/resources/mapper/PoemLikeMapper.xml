@@ -24,7 +24,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <select id="selectPoemLikePoemCnt" resultType="Integer" parameterType="Integer">
+    <select id="selectPoemLikePoemCount" resultType="Integer" parameterType="Integer">
         SELECT COUNT(*) FROM poem_like
         WHERE poem_id = #{poemId}
     </select>

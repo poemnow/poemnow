@@ -24,4 +24,6 @@ public interface FollowService {
 	List<HashMap<String, String>> findYourFollowerSame(int parseInt, int id);
 
 	List<HashMap<String, String>> findYourFollowerDif(int parseInt, int id);
+
+	int removeFollower(int i, int followId);
 }

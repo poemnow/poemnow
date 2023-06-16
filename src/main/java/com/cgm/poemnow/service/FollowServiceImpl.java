@@ -68,4 +68,9 @@ public class FollowServiceImpl implements FollowService {
 		return followMapper.selectYourFollowerDif(id, userId);
 	}
 
+	@Override
+	public int removeFollower(int userId, int followId) {
+		return followMapper.deleteFollower(userId, followId);
+	}
+
 }

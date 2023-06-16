@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/poem")
+@CrossOrigin("*")
 public class PoemController {
 
 	@Autowired
