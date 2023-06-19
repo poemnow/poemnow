@@ -23,6 +23,7 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 		String access_Token = "";
 		String refresh_Token = "";
 		String reqURL = "https://kauth.kakao.com/oauth/token";
+		String id_token = null;
 
 		try {
 			URL url = new URL(reqURL);
@@ -36,15 +37,16 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
-			sb.append("&client_id=053162a8f6b7ba902d0d94786b63a656"); // TODO REST_API_KEY 입력
-			sb.append("&redirect_uri=http://localhost:8080/login/kakaoCallback"); // TODO 인가코드 받은 redirect_uri 입력
+			sb.append("&client_id=6893a120a5484935b8a5812038524c6a"); // TODO REST_API_KEY 입력
+			sb.append("&redirect_uri=http://localhost:3000/auth"); // TODO 인가코드 받은 redirect_uri 입력
 			sb.append("&code=" + code);
+//			System.out.println(sb.toString());
 			bw.write(sb.toString());
 			bw.flush();
 
 			//결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
-			//System.out.println("responseCode : " + responseCode);
+//			System.out.println("responseCode : " + responseCode);
 
 			//요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -54,7 +56,10 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			//System.out.println("response body : " + result);
+//			System.out.println("response body : " + result);
+			String[] temp = result.split(",");
+			id_token = temp[3].substring(11);
+//			System.out.println("idToken = " + id_token);
 
 			//Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
 			JsonParser parser = new JsonParser();
@@ -63,7 +68,7 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 			access_Token = element.getAsJsonObject().get("access_token").getAsString();
 			refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
 
-			//System.out.println("access_token : " + access_Token);
+//			System.out.println("access_token : " + access_Token);
 			//System.out.println("refresh_token : " + refresh_Token);
 
 			br.close();
@@ -90,7 +95,7 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 
 			//결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
-			//System.out.println("responseCode : " + responseCode);
+			System.out.println("responseCode : " + responseCode);
 
 			//요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -100,21 +105,26 @@ public class KakaoLoginServiceImpl implements KaKaoLoginService {
 			while ((line = br.readLine()) != null) {
 				result += line;
 			}
-			//System.out.println("response body : " + result);
+			System.out.println("response body : " + result);
 
 			//Gson 라이브러리로 JSON파싱
 			JsonParser parser = new JsonParser();
 			JsonElement element = parser.parse(result);
 
 			id = element.getAsJsonObject().get("id").getAsString();
-			boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-			String email = "";
-			if(hasEmail){
-				email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-			}
+//			boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
+//			String email = "";
+//			if(hasEmail){
+//				email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
+//			}
 
 			//System.out.println("id : " + id);
 			//System.out.println("email : " + email);
+
+			// ------- 미구현 -----------
+			// 위의 id를 사용해서 사용자 정보를 생성해야 됨.
+			// 추가적인 정보 생일, 이메일 등은 일단 포기
+
 
 			br.close();
 
