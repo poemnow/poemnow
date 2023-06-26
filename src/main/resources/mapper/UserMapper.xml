@@ -101,4 +101,10 @@
         DELETE FROM user WHERE id = #{id}
     </delete>
 
+    <select id="selectUserByEmail" parameterType="String" resultMap="userMap">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+
 </mapper>

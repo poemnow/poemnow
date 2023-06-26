@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class UserServiceImpl implements  UserService {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
@@ -231,6 +231,14 @@ public class UserServiceImpl implements  UserService {
 	@Override
 	public int removeUserByDelete(int id) {
 		return userMapper.deleteUserReal(id);
+	}
+
+	@Override
+	public User findUserByEmail(String email) {
+		User userFound = userMapper.selectUserByEmail(email);
+		if (userFound != null) {
+			throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+		} else return userFound;
 	}
 
 }

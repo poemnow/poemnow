@@ -1,10 +1,10 @@
 package com.cgm.poemnow.mapper;
 
-import java.util.List;
-
 import com.cgm.poemnow.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper {
@@ -21,4 +21,5 @@ public interface UserMapper {
 
 	int deleteUserReal(int id);
 
+	User selectUserByEmail(String email);
 }
